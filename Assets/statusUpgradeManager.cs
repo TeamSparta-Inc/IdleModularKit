@@ -8,6 +8,7 @@ using TMPro;
 
 enum StatusType { ATK, HP, DEF, CRIT_CH, CRIT_DMG }
 
+[Serializable]
 struct UpgradeData
 {
     public StatusType statusType;
@@ -46,7 +47,7 @@ struct UpgradeData
         upgradeValue += increase;
         upgradePrice = upgradePrice + (upgradePrice / 100 * pricePercent);
 
-        PlayerPrefs.SetInt($"{statusType}UpgradeLevel", upgradeLevel);
+        ES3.Save<int>($"{statusType}UpgradeLevel", upgradeLevel);
         OnStatusUpgrade?.Invoke(increase);
     }
 
@@ -56,10 +57,9 @@ struct UpgradeData
         critUpgradeValue += critIncrease;
         upgradePrice = upgradePrice + (upgradePrice / 100 * pricePercent);
 
-        PlayerPrefs.SetInt($"{statusType}UpgradeLevel", upgradeLevel);
+        ES3.Save<int>($"{statusType}UpgradeLevel", upgradeLevel);
         OnCritStatusUpgrade?.Invoke(critIncrease);
     }
-
 
     public void LoadLevelforStatus()
     {
@@ -127,34 +127,39 @@ public class statusUpgradeManager : MonoBehaviour
 
     [Header("[능력치 조정]")]
     [Header("[공격력]")]
-    [Header("[처음 가격, 스텟 상승치, 가격 상승률]")]
-    [SerializeField] int attackFirstPrice = 150;
-    [SerializeField] int attackincrease = 2;
-    [SerializeField] int attackpricePercent = 15;
+    [Header("[초기 값, 증가량, 초기 비용, 증가율]")]
+    [SerializeField] int attackFirstValue = 10;
+    [SerializeField] int attackincrease = 3;
+    [SerializeField] int attackFirstPrice = 100;
+    [SerializeField] int attackpricePercent = 10;
 
     [Header("[체력]")]
-    [Header("[처음 가격, 스텟 상승치, 가격 상승률]")]
-    [SerializeField] int healthFirstPrice = 150;
-    [SerializeField] int healthincrease = 50;
-    [SerializeField] int healthpricePercent = 15;
+    [Header("[초기 값, 증가량, 초기 비용, 증가율]")]
+    [SerializeField] int healthFirstValue = 50;
+    [SerializeField] int healthincrease = 10;
+    [SerializeField] int healthFirstPrice = 100;
+    [SerializeField] int healthpricePercent = 10;
 
     [Header("[방어력]")]
-    [Header("[처음 가격, 스텟 상승치, 가격 상승률]")]
-    [SerializeField] int defenseFirstPrice = 200;
+    [Header("[초기 값, 증가량, 초기 비용, 증가율]")]
+    [SerializeField] int defenseFirstValue = 5;
     [SerializeField] int defenseincrease = 2;
-    [SerializeField] int defensepricePercent = 17;
+    [SerializeField] int defenseFirstPrice = 120;
+    [SerializeField] int defensepricePercent = 12;
 
     [Header("[크리티컬 확률]")]
-    [Header("[처음 가격, 스텟 상승치, 가격 상승률]")]
-    [SerializeField] int critChanceFirstPrice = 500;
+    [Header("[초기 값, 증가량, 초기 비용, 증가율]")]
+    [SerializeField] float critChanceFirstValue = 5.0f;
     [SerializeField] float critChanceincrease = 0.1f;
-    [SerializeField] int critChancepricePercent = 25;
+    [SerializeField] int critChanceFirstPrice = 200;
+    [SerializeField] int critChancepricePercent = 20;
 
     [Header("[크리티컬 데미지]")]
-    [Header("[처음 가격, 스텟 상승치, 가격 상승률]")]
-    [SerializeField] int critDamageFirstPrice = 500;
+    [Header("[초기 값, 증가량, 초기 비용, 증가율]")]
+    [SerializeField] int critDamageFirstValue = 150;
     [SerializeField] int critDamageincrease = 10;
-    [SerializeField] int critDamagepricePercent = 18;
+    [SerializeField] int critDamageFirstPrice = 150;
+    [SerializeField] int critDamagepricePercent = 15;
 
 
 
@@ -221,11 +226,11 @@ public class statusUpgradeManager : MonoBehaviour
     {
         attackUpgradeData = new UpgradeData(
             StatusType.ATK,
-            PlayerPrefs.GetInt($"{StatusType.ATK}UpgradeLevel", 0),
+            ES3.Load<int>($"{StatusType.ATK}UpgradeLevel", 0),
             attackFirstPrice,
             attackpricePercent,
             increase: attackincrease,
-            upgradeValue: 0,
+            upgradeValue: attackFirstValue,
             OnStatusUpgrade: OnAttackUpgrade,
             upgradeLevelText: attackUpgradeLevelText,
             upgradeValueText: attackUpgradeValueText,
@@ -233,11 +238,11 @@ public class statusUpgradeManager : MonoBehaviour
             upgradeBtn: attackUpgradeBtn);
         healthUpgradeData = new UpgradeData(
             StatusType.HP,
-            PlayerPrefs.GetInt($"{StatusType.HP}UpgradeLevel", 0),
+            ES3.Load<int>($"{StatusType.HP}UpgradeLevel", 0),
             healthFirstPrice,
             healthpricePercent,
             increase: healthincrease,
-            upgradeValue: 0,
+            upgradeValue: healthFirstValue,
             OnStatusUpgrade: OnHealthUpgrade,
             upgradeLevelText: healthUpgradeLevelText,
             upgradeValueText: healthUpgradeValueText,
@@ -246,11 +251,11 @@ public class statusUpgradeManager : MonoBehaviour
             );
         defenseUpgradeData = new UpgradeData(
             StatusType.DEF,
-            PlayerPrefs.GetInt($"{StatusType.DEF}UpgradeLevel", 0),
+            ES3.Load<int>($"{StatusType.DEF}UpgradeLevel", 0),
             defenseFirstPrice,
             defensepricePercent,
             increase: defenseincrease,
-            upgradeValue: 0,
+            upgradeValue: defenseFirstValue,
             OnStatusUpgrade: OnDefenseUpgrade,
             upgradeLevelText: defenseUpgradeLevelText,
             upgradeValueText: defenseUpgradeValueText,
@@ -258,11 +263,11 @@ public class statusUpgradeManager : MonoBehaviour
             upgradeBtn: defenseUpgradeBtn);
         critChanceUpgradeData = new UpgradeData(
             StatusType.CRIT_CH,
-            PlayerPrefs.GetInt($"{StatusType.CRIT_CH}UpgradeLevel", 0),
+            ES3.Load<int>($"{StatusType.CRIT_CH}UpgradeLevel", 0),
             critChanceFirstPrice,
             critChancepricePercent,
             critIncrease: critChanceincrease,
-            critUpgradeValue: 0f,
+            critUpgradeValue: critChanceFirstValue,
             OnCritStatusUpgrade: OnCritChanceUpgrade,
             upgradeLevelText: critChanceUpgradeLevelText,
             upgradeValueText: critChanceUpgradeValueText,
@@ -271,11 +276,11 @@ public class statusUpgradeManager : MonoBehaviour
             );
         critDamageUpgradeData = new UpgradeData(
             StatusType.CRIT_DMG,
-            PlayerPrefs.GetInt($"{StatusType.CRIT_DMG}UpgradeLevel", 0),
+            ES3.Load<int>($"{StatusType.CRIT_DMG}UpgradeLevel", 0),
             critDamageFirstPrice,
             critDamagepricePercent,
             critIncrease: critDamageincrease,
-            critUpgradeValue: 100f,
+            critUpgradeValue: critDamageFirstValue,
             OnCritStatusUpgrade: OnCritDamageUpgrade,
             upgradeLevelText: critDamageUpgradeLevelText,
             upgradeValueText: critDamageUpgradeValueText,
@@ -326,30 +331,40 @@ public class statusUpgradeManager : MonoBehaviour
     // 버튼 눌렸을 때 동작하는 메서드
     public void UpgradeAttack()
     {
+        if (!CurrencyManager.instance.SubtractCurrency("Gold", attackUpgradeData.upgradePrice)) return;
+
         attackUpgradeData.StatusUpdate();
         SetUpgradeUI(attackUpgradeData);
     }
 
     public void UpgradeHealth()
     {
+        if (!CurrencyManager.instance.SubtractCurrency("Gold", healthUpgradeData.upgradePrice)) return;
+
         healthUpgradeData.StatusUpdate();
         SetUpgradeUI(healthUpgradeData);
     }
 
     public void UpgradeDefense()
     {
+        if (!CurrencyManager.instance.SubtractCurrency("Gold", defenseUpgradeData.upgradePrice)) return;
+
         defenseUpgradeData.StatusUpdate();
         SetUpgradeUI(defenseUpgradeData);
     }
 
     public void UpgradeCritChance()
     {
+        if (!CurrencyManager.instance.SubtractCurrency("Gold", critChanceUpgradeData.upgradePrice)) return;
+
         critChanceUpgradeData.CritStatusUpdate();
         SetUpgradeUI(critChanceUpgradeData);
     }
 
     public void UpgradeCritDamage()
     {
+        if (!CurrencyManager.instance.SubtractCurrency("Gold", critDamageUpgradeData.upgradePrice)) return;
+
         critDamageUpgradeData.CritStatusUpdate();
         SetUpgradeUI(critDamageUpgradeData);
     }
