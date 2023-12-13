@@ -6,98 +6,159 @@ using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
 
+enum StatusType { ATK, HP, DEF, CRIT_CH, CRIT_DMG }
+
+struct UpgradeData
+{
+    public StatusType statusType;
+
+    public int upgradeLevel;
+    public BigInteger upgradePrice;
+    public BigInteger upgradeValue;
+    public int pricePercent;
+    public int increase;
+
+    public Action<int> OnStatusUpgrade;
+
+    public float critUpgradeValue;
+    public float critIncrease;
+    public Action<float> OnCritStatusUpgrade;
+
+    public TMP_Text upgradeLevelText;
+    public TMP_Text upgradeValueText;
+    public TMP_Text upgradePriceText;
+    public Button upgradeBtn;
+
+    public void SetUpgradeUI()
+    {
+        upgradeLevelText.text = $"{upgradeLevel}";
+        upgradePriceText.text = $"{upgradePrice.ChangeMoney()}";
+        if (upgradeValue == null) {
+            upgradeValueText.text = $"{critUpgradeValue:0.00}";
+            return;
+        }
+        upgradeValueText.text = $"{upgradeValue.ChangeMoney()}";
+    }
+
+    public void StatusUpdate()
+    {
+        upgradeLevel++;
+        upgradeValue += increase;
+        upgradePrice = upgradePrice + (upgradePrice / 100 * pricePercent);
+
+        PlayerPrefs.SetInt($"{statusType}UpgradeLevel", upgradeLevel);
+        OnStatusUpgrade?.Invoke(increase);
+    }
+
+    public void CritStatusUpdate()
+    {
+        upgradeLevel++;
+        critUpgradeValue += critIncrease;
+        upgradePrice = upgradePrice + (upgradePrice / 100 * pricePercent);
+
+        PlayerPrefs.SetInt($"{statusType}UpgradeLevel", upgradeLevel);
+        OnCritStatusUpgrade?.Invoke(critIncrease);
+    }
+
+
+    public void LoadLevelforStatus()
+    {
+        for (int i=0; i<upgradeLevel; i++)
+        {
+            upgradeValue += increase;
+            upgradePrice = upgradePrice + (upgradePrice / 100 * pricePercent);
+
+            OnStatusUpgrade?.Invoke(increase);
+        }
+    }
+
+    public void LoadLevelforCritStatus()
+    {
+        for (int i=0; i<upgradeLevel; i++)
+        {
+            critUpgradeValue += critIncrease;
+            upgradePrice = upgradePrice + (upgradePrice / 100 * pricePercent);
+
+            OnCritStatusUpgrade?.Invoke(critIncrease);
+        }
+    }
+
+
+    public UpgradeData(StatusType statusType, int upgradeLevel, BigInteger upgradePrice, int pricePercent,
+        TMP_Text upgradeLevelText, TMP_Text upgradeValueText, TMP_Text upgradePriceText, Button upgradeBtn,
+        int increase = 0, BigInteger upgradeValue = null, Action<int> OnStatusUpgrade = null, float critIncrease = 0, float critUpgradeValue = 0, Action<float> OnCritStatusUpgrade = null)
+    {
+        this.statusType = statusType;
+        this.upgradeLevel = upgradeLevel;
+        this.upgradePrice = upgradePrice;
+        this.upgradeValue = upgradeValue;
+        this.pricePercent = pricePercent;
+        this.increase = increase;
+
+        this.OnStatusUpgrade = OnStatusUpgrade;
+
+        this.upgradeLevelText = upgradeLevelText;
+        this.upgradeValueText = upgradeValueText;
+        this.upgradePriceText = upgradePriceText;
+        this.upgradeBtn = upgradeBtn;
+
+
+        this.critUpgradeValue = critUpgradeValue;
+        this.critIncrease = critIncrease;
+        this.OnCritStatusUpgrade = OnCritStatusUpgrade;
+
+        if (statusType == StatusType.CRIT_CH || statusType == StatusType.CRIT_DMG)
+            LoadLevelforCritStatus();
+        else
+            LoadLevelforStatus();
+        
+    }
+}
+
+
 
 public class statusUpgradeManager : MonoBehaviour
 {
-    public static event Action<int> _onAttackUpgrade;
-    public static event Action<int> _onHealthUpgrade;
-    public static event Action<int> _onDefenseUpgrade;
-    public static event Action<float> _onCritChanceUpgrade;
-    public static event Action<float> _onCritDamageUpgrade;
+    public static event Action<int> OnAttackUpgrade;
+    public static event Action<int> OnHealthUpgrade;
+    public static event Action<int> OnDefenseUpgrade;
+    public static event Action<float> OnCritChanceUpgrade;
+    public static event Action<float> OnCritDamageUpgrade;
 
-#region UpgradeData
-    int attackUpgradeLevel
-    {
-        get
-        {
-            return PlayerPrefs.GetInt("AttackUpgradeLevel",1);
-        }
-        set
-        {
-            PlayerPrefs.SetInt("AttackUpgradeLevel", value);
-        }
-    } 
-    BigInteger attackUpgradePrice = 150; // [픽셀헌터] 1(180) -> 20(450) /// [현재] 1(50) -> 20() 
-    BigInteger attackUpgradeValue = 0; // 
-    int attackPricePercent = 3;
-    int increaseAttack = 2;
+    [Header("[능력치 조정]")]
+    [Header("[공격력]")]
+    [Header("[처음 가격, 스텟 상승치, 가격 상승률]")]
+    [SerializeField] int attackFirstPrice = 150;
+    [SerializeField] int attackincrease = 2;
+    [SerializeField] int attackpricePercent = 15;
 
-    int healthUpgradeLevel
-    {
-        get
-        {
-            return PlayerPrefs.GetInt("HealthUpgradeLevel", 1);
-        }
-        set
-        {
-            PlayerPrefs.SetInt("HealthUpgradeLevel", value);
-        }
-    }
-    BigInteger healthUpgradePrice = 150;
-    BigInteger healthUpgradeValue = 0;
-    int healthPricePercent = 3;
-    int increaseHealth = 50;
+    [Header("[체력]")]
+    [Header("[처음 가격, 스텟 상승치, 가격 상승률]")]
+    [SerializeField] int healthFirstPrice = 150;
+    [SerializeField] int healthincrease = 50;
+    [SerializeField] int healthpricePercent = 15;
 
-    int defenseUpgradeLevel
-    {
-        get
-        {
-            return PlayerPrefs.GetInt("DefenseUpgradeLevel", 1);
-        }
-        set
-        {
-            PlayerPrefs.SetInt("DefenseUpgradeLevel", value);
-        }
-    }
-    BigInteger defenseUpgradePrice = 200;
-    BigInteger defenseUpgradeValue = 0;
-    int defensePricePercent = 4;
-    int increaseDefense = 2;
+    [Header("[방어력]")]
+    [Header("[처음 가격, 스텟 상승치, 가격 상승률]")]
+    [SerializeField] int defenseFirstPrice = 200;
+    [SerializeField] int defenseincrease = 2;
+    [SerializeField] int defensepricePercent = 17;
 
-    int critChanceUpgradeLevel
-    {
-        get
-        {
-            return PlayerPrefs.GetInt("CritChanceUpgradeLevel", 1);
-        }
-        set
-        {
-            PlayerPrefs.SetInt("CritChanceUpgradeLevel", value);
-        }
-    }
-    BigInteger critChanceUpgradePrice = 500;
-    float critChanceUpgradeValue = 0;
-    int critChancePricePercent = 6;
-    float increaseCritChance = 0.1f;
+    [Header("[크리티컬 확률]")]
+    [Header("[처음 가격, 스텟 상승치, 가격 상승률]")]
+    [SerializeField] int critChanceFirstPrice = 500;
+    [SerializeField] float critChanceincrease = 0.1f;
+    [SerializeField] int critChancepricePercent = 25;
 
-    int critDamageUpgradeLevel
-    {
-        get
-        {
-            return PlayerPrefs.GetInt("CritDamageUpgradeLevel", 1);
-        }
-        set
-        {
-            PlayerPrefs.SetInt("CritDamageUpgradeLevel", value);
-        }
-    }
-    BigInteger critDamageUpgradePrice = 500;
-    float critDamageUpgradeValue = 100f;
-    int critDamagePricePercent = 4;
-    float increaseCritDamage = 10f;
-    #endregion
+    [Header("[크리티컬 데미지]")]
+    [Header("[처음 가격, 스텟 상승치, 가격 상승률]")]
+    [SerializeField] int critDamageFirstPrice = 500;
+    [SerializeField] int critDamageincrease = 10;
+    [SerializeField] int critDamagepricePercent = 18;
 
 
+
+    [Header("업그레이드 UI")]
     [Header("[공격력]")]
     [SerializeField] TMP_Text attackUpgradeLevelText;
     [SerializeField] TMP_Text attackUpgradeValueText;
@@ -130,106 +191,166 @@ public class statusUpgradeManager : MonoBehaviour
 
 
 
+    UpgradeData attackUpgradeData;
+    UpgradeData healthUpgradeData;
+    UpgradeData defenseUpgradeData;
+    UpgradeData critChanceUpgradeData;
+    UpgradeData critDamageUpgradeData;
+
+
     private void Start()
+    {
+
+        InitializeButtonListeners();
+        InitializeUpgradeData();
+        SetUpgradeUI_ALL();
+    }
+
+    // 버튼 초기화 메서드
+    void InitializeButtonListeners()
     {
         attackUpgradeBtn.onClick.AddListener(UpgradeAttack);
         healthUpgradeBtn.onClick.AddListener(UpgradeHealth);
         defenseUpgradeBtn.onClick.AddListener(UpgradeDefense);
         critChanceUpgradeBtn.onClick.AddListener(UpgradeCritChance);
         critDamageUpgradeBtn.onClick.AddListener(UpgradeCritDamage);
-        SetUpgradeUI_ALL();
     }
 
+    // UpdateData 초기화 메서드 - 여기서 스텟퍼센트 조정 가능
+    void InitializeUpgradeData()
+    {
+        attackUpgradeData = new UpgradeData(
+            StatusType.ATK,
+            PlayerPrefs.GetInt($"{StatusType.ATK}UpgradeLevel", 0),
+            attackFirstPrice,
+            attackpricePercent,
+            increase: attackincrease,
+            upgradeValue: 0,
+            OnStatusUpgrade: OnAttackUpgrade,
+            upgradeLevelText: attackUpgradeLevelText,
+            upgradeValueText: attackUpgradeValueText,
+            upgradePriceText: attackUpgradePriceText,
+            upgradeBtn: attackUpgradeBtn);
+        healthUpgradeData = new UpgradeData(
+            StatusType.HP,
+            PlayerPrefs.GetInt($"{StatusType.HP}UpgradeLevel", 0),
+            healthFirstPrice,
+            healthpricePercent,
+            increase: healthincrease,
+            upgradeValue: 0,
+            OnStatusUpgrade: OnHealthUpgrade,
+            upgradeLevelText: healthUpgradeLevelText,
+            upgradeValueText: healthUpgradeValueText,
+            upgradePriceText: healthUpgradePriceText,
+            upgradeBtn: healthUpgradeBtn
+            );
+        defenseUpgradeData = new UpgradeData(
+            StatusType.DEF,
+            PlayerPrefs.GetInt($"{StatusType.DEF}UpgradeLevel", 0),
+            defenseFirstPrice,
+            defensepricePercent,
+            increase: defenseincrease,
+            upgradeValue: 0,
+            OnStatusUpgrade: OnDefenseUpgrade,
+            upgradeLevelText: defenseUpgradeLevelText,
+            upgradeValueText: defenseUpgradeValueText,
+            upgradePriceText: defenseUpgradePriceText,
+            upgradeBtn: defenseUpgradeBtn);
+        critChanceUpgradeData = new UpgradeData(
+            StatusType.CRIT_CH,
+            PlayerPrefs.GetInt($"{StatusType.CRIT_CH}UpgradeLevel", 0),
+            critChanceFirstPrice,
+            critChancepricePercent,
+            critIncrease: critChanceincrease,
+            critUpgradeValue: 0f,
+            OnCritStatusUpgrade: OnCritChanceUpgrade,
+            upgradeLevelText: critChanceUpgradeLevelText,
+            upgradeValueText: critChanceUpgradeValueText,
+            upgradePriceText: critChanceUpgradePriceText,
+            upgradeBtn: critChanceUpgradeBtn
+            );
+        critDamageUpgradeData = new UpgradeData(
+            StatusType.CRIT_DMG,
+            PlayerPrefs.GetInt($"{StatusType.CRIT_DMG}UpgradeLevel", 0),
+            critDamageFirstPrice,
+            critDamagepricePercent,
+            critIncrease: critDamageincrease,
+            critUpgradeValue: 100f,
+            OnCritStatusUpgrade: OnCritDamageUpgrade,
+            upgradeLevelText: critDamageUpgradeLevelText,
+            upgradeValueText: critDamageUpgradeValueText,
+            upgradePriceText: critDamageUpgradePriceText,
+            upgradeBtn: critDamageUpgradeBtn
+            );
+    }
+
+
+
+    // UI 업데이트
+    void SetUpgradeUI(UpgradeData upgradeData) => upgradeData.SetUpgradeUI();
+
+    void SetUpgradeUI(StatusType type)
+    {
+        switch (type)
+        {
+            case StatusType.ATK:
+                attackUpgradeData.SetUpgradeUI();
+                break;
+            case StatusType.HP:
+                healthUpgradeData.SetUpgradeUI();
+                break;
+            case StatusType.DEF:
+                defenseUpgradeData.SetUpgradeUI();
+                break;
+            case StatusType.CRIT_CH:
+                critChanceUpgradeData.SetUpgradeUI();
+                break;
+            case StatusType.CRIT_DMG:
+                critDamageUpgradeData.SetUpgradeUI();
+                break;
+        }
+    }
 
     void SetUpgradeUI_ALL()
     {
-        SetUpgradeUI_Attack();
-        SetUpgradeUI_Health();
-        SetUpgradeUI_Defense();
-        SetUpgradeUI_CritChance();
-        SetUpgradeUI_CritDamage();
-    }
-
-    void SetUpgradeUI_Attack()
-    {
-        attackUpgradeLevelText.text = $"{attackUpgradeLevel}";
-        attackUpgradePriceText.text = $"{attackUpgradePrice}";
-        attackUpgradeValueText.text = $"{attackUpgradeValue}";
-    }
-
-    void SetUpgradeUI_Health()
-    {
-        healthUpgradeLevelText.text = $"{healthUpgradeLevel}";
-        healthUpgradePriceText.text = $"{healthUpgradePrice}";
-        healthUpgradeValueText.text = $"{healthUpgradeValue}";
-    }
-
-    void SetUpgradeUI_Defense()
-    {
-        defenseUpgradeLevelText.text = $"{defenseUpgradeLevel}";
-        defenseUpgradePriceText.text = $"{defenseUpgradePrice}";
-        defenseUpgradeValueText.text = $"{defenseUpgradeValue}";
-    }
-
-    void SetUpgradeUI_CritChance()
-    {
-        critChanceUpgradeLevelText.text = $"{critChanceUpgradeLevel}";
-        critChanceUpgradePriceText.text = $"{critChanceUpgradePrice}";
-        critChanceUpgradeValueText.text = $"{critChanceUpgradeValue}";
-    }
-
-    void SetUpgradeUI_CritDamage()
-    {
-        critDamageUpgradeLevelText.text = $"{critDamageUpgradeLevel}";
-        critDamageUpgradePriceText.text = $"{critDamageUpgradePrice}";
-        critDamageUpgradeValueText.text = $"{critDamageUpgradeValue}";
+        attackUpgradeData.SetUpgradeUI();
+        healthUpgradeData.SetUpgradeUI();
+        defenseUpgradeData.SetUpgradeUI();
+        critChanceUpgradeData.SetUpgradeUI();
+        critDamageUpgradeData.SetUpgradeUI();
     }
 
 
 
 
+    // 버튼 눌렸을 때 동작하는 메서드
     public void UpgradeAttack()
     {
-        attackUpgradeLevel++;
-        attackUpgradeValue += increaseAttack;
-        attackUpgradePrice = attackUpgradePrice + (attackUpgradePrice / 100 * attackPricePercent);
-        _onAttackUpgrade?.Invoke(increaseAttack);
-        SetUpgradeUI_Attack();
+        attackUpgradeData.StatusUpdate();
+        SetUpgradeUI(attackUpgradeData);
     }
 
     public void UpgradeHealth()
     {
-        healthUpgradeLevel++;
-        healthUpgradeValue += increaseHealth;
-        healthUpgradePrice = healthUpgradePrice + (healthUpgradePrice / 100 * healthPricePercent);
-        _onHealthUpgrade?.Invoke(increaseHealth);
-        SetUpgradeUI_Health();
+        healthUpgradeData.StatusUpdate();
+        SetUpgradeUI(healthUpgradeData);
     }
 
     public void UpgradeDefense()
     {
-        defenseUpgradeLevel++;
-        defenseUpgradeValue += increaseDefense;
-        defenseUpgradePrice = defenseUpgradePrice + (defenseUpgradePrice / 100 * defensePricePercent);
-        _onDefenseUpgrade?.Invoke(increaseDefense);
-        SetUpgradeUI_Defense();
+        defenseUpgradeData.StatusUpdate();
+        SetUpgradeUI(defenseUpgradeData);
     }
 
     public void UpgradeCritChance()
     {
-        critChanceUpgradeLevel++;
-        critChanceUpgradeValue += increaseCritChance;
-        critChanceUpgradePrice = critChanceUpgradePrice + (critChanceUpgradePrice / 100 * critChancePricePercent);
-        _onCritChanceUpgrade?.Invoke(increaseCritChance);
-        SetUpgradeUI_CritChance();
+        critChanceUpgradeData.CritStatusUpdate();
+        SetUpgradeUI(critChanceUpgradeData);
     }
 
     public void UpgradeCritDamage()
     {
-        critDamageUpgradeLevel++;
-        critDamageUpgradeValue += increaseCritDamage;
-        critDamageUpgradePrice = critDamageUpgradePrice + (critDamageUpgradePrice / 100 * critDamagePricePercent);
-        _onCritDamageUpgrade?.Invoke(increaseCritDamage);
-        SetUpgradeUI_CritDamage();
+        critDamageUpgradeData.CritStatusUpdate();
+        SetUpgradeUI(critDamageUpgradeData);
     }
 }
