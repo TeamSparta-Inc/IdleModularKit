@@ -35,9 +35,9 @@ public class EquipmentManager : MonoBehaviour
             {
                 WeaponInfo weapon = weapons[weaponCount];
 
-                string name = $"{rarity} Weapon Lv{level}";
-                string equippedEffect = $"Basic attack power increased by {level * 10}%";
-                string ownedEffect = $"Overall damage increased by {level * 2}%";
+                string name = $"{rarity}_{level}";// Weapon Lv
+                string equippedEffect = $"{level * 10}%";//Basic attack power increased by 
+                string ownedEffect = $"{level * 2}%"; //Overall damage increased by 
                 string enhancementEffect = $"At Lv{level * 50}, attack power increased by {level * 100}%";
 
 

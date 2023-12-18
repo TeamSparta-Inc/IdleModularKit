@@ -44,7 +44,13 @@ public class EquipmentUI : MonoBehaviour
                 selectEquipment.GetComponent<WeaponInfo>().SetUI();
                 break;
         }
+        SetselectEquipmentTextUI(equipment);
+    }
 
-
+    void SetselectEquipmentTextUI(Equipment equipment)
+    {
+        selectEquipmentName.text = equipment.name;
+        selectEquipment_equippedEffect.text = equipment.equippedEffect;
+        selectEquipment_ownedEffect.text = equipment.ownedEffect;
     }
 }

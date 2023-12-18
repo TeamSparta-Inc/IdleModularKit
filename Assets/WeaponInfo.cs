@@ -69,5 +69,6 @@ public class WeaponInfo : Equipment
     void SetLevelText()
     {
         weaponLevelText.text = level.ToString();
+        
     }
 }
