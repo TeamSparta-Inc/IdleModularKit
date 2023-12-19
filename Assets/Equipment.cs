@@ -20,7 +20,8 @@ public enum Rarity
     Epic,
     Ancient,
     Legendary,
-    Mythology
+    Mythology,
+    None
     // 기타 희귀도...
 }
 
@@ -33,13 +34,13 @@ public class Equipment : MonoBehaviour
     public EquipmentType type;   // 장비의 타입 (예: 무기, 방어구 등)
     public Rarity rarity;        // 장비의 희귀도
     public int enhancementLevel; // 강화 상태 (예: 0, 1, 2, ...)
-    public string equippedEffect;  // 장착효과
-    public string ownedEffect;     // 보유효과
+    public int equippedEffect;  // 장착효과
+    public int ownedEffect;     // 보유효과
     public string enhancementEffect; // 강화효과
 
 
     public Equipment(string name, int quantity, int level, EquipmentType type, Rarity rarity,
-                 int enhancementLevel, string equippedEffect, string ownedEffect, string enhancementEffect)
+                 int enhancementLevel, int equippedEffect, int ownedEffect, string enhancementEffect)
     {
         this.name = name;
         this.quantity = quantity;
@@ -58,5 +59,41 @@ public class Equipment : MonoBehaviour
         // 강화 로직...
         enhancementLevel++;
         // 강화효과 업데이트...
+    }
+
+
+
+    public float CalculateEffect(float baseStat)
+    {
+        float effect = 0f;
+        switch (type)
+        {
+            case EquipmentType.Weapon:
+                // 무기의 경우
+                effect = baseStat + (enhancementLevel * baseStat * 0.05f); // 장착 효과
+                effect += 10; // 보유 효과
+                break;
+            case EquipmentType.Armor:
+                // 방어구의 경우
+                effect = baseStat + (enhancementLevel * baseStat * 0.03f); // 장착 효과
+                effect += 20; // 보유 효과
+                break;
+        }
+        return effect;
+    }
+
+    public bool CheckQuantity()
+    {
+        if (quantity >= 4)
+        {
+            return true;
+        }
+
+        SetQuantityUI();
+        return false;
+    }
+
+    public virtual void SetQuantityUI()
+    {
     }
 }

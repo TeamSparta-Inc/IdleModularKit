@@ -18,6 +18,8 @@ public class EquipmentManager : MonoBehaviour
     //string[] colorsHex = { "#333333", "#3CB371", "#4169E1", "#7058A3", "#FFA500", "#C9BC46", "#DF6464" };
     [SerializeField] Color[] colors;
 
+
+
     int maxLevel = 4;
 
 
@@ -29,23 +31,28 @@ public class EquipmentManager : MonoBehaviour
     void SetAllWeapons()
     {
         int weaponCount = 0;
+        int rarityIntValue = 0;
         foreach(Rarity rarity in rarities)
         {
+            if (rarity == Rarity.None) continue;
+            rarityIntValue = Convert.ToInt32(rarity);
             for (int level =1; level <= maxLevel; level++)
             {
                 WeaponInfo weapon = weapons[weaponCount];
 
+                
+
                 string name = $"{rarity}_{level}";// Weapon Lv
-                string equippedEffect = $"{level * 10}%";//Basic attack power increased by 
-                string ownedEffect = $"{level * 2}%"; //Overall damage increased by 
+                int equippedEffect = (level * 10) * rarityIntValue;
+                int ownedEffect = (level * 2) * rarityIntValue;
+                string equippedEffectText = $"{equippedEffect}%";//Basic attack power increased by 
+                string ownedEffectText = $"{ownedEffect}%"; //Overall damage increased by 
                 string enhancementEffect = $"At Lv{level * 50}, attack power increased by {level * 100}%";
 
-
                 weapon.SetWeaponInfo(name, 1,level, EquipmentType.Weapon, rarity,
-                                 level, equippedEffect, ownedEffect, enhancementEffect, colors[Convert.ToInt32(rarity)]);
+                                 level, equippedEffect, ownedEffect, enhancementEffect, colors[rarityIntValue]);
 
                 weapon.GetComponent<Button>().onClick.AddListener(() => EquipmentUI.TriggerSelectEquipment(weapon));
-
 
                 allEquipment.Add(weapon);
 

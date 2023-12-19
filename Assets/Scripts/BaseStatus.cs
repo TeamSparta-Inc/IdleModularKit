@@ -1,24 +1,23 @@
-using Keiwando.BigInteger;
+
 
 // 모든 능력치 객체가 따라야 할 기본 인터페이스
-public interface IStatus 
-{
-    BigInteger attack { get; set; }
-    BigInteger health { get; set; }
-    BigInteger defense { get; set; }
-    float critChance { get; set; }
-    float critDamage { get; set; }
-
-}
+//public interface IStatus 
+//{
+//    int baseAttack { get; set; }
+//    int baseHealth { get; set; }
+//    int baseDefense { get; set; }
+//    float baseCritChance { get; set; }
+//    float baseCritDamage { get; set; }
+//}
 
 // 모든 능력치 객체의 기본적인 행동 정의
-public class BaseStatus : IStatus
+public class BaseStatus
 {
-    public BigInteger attack { get; set; } // 공격력
-    public BigInteger health { get; set; } // 체력
-    public BigInteger defense { get; set; } // 방어력
+    public int baseAttack; // 공격력
+    public int baseHealth; // 체력
+    public int baseDefense; // 방어력
 
     // 치명타 확률과 치명타 데미지는 일반적으로 큰 수치가 아니므로, float 사용
-    public float critChance { get; set; } // 크리티컬 확률
-    public float critDamage { get; set; } // 크리티컬 데미지
+    public float baseCritChance;// 크리티컬 확률
+    public float baseCritDamage;// 크리티컬 데미지
 }

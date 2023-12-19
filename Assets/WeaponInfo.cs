@@ -4,15 +4,18 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+
 public class WeaponInfo : Equipment
 {
     [SerializeField] Image background;
     [SerializeField] Image weaponImage;
     [SerializeField] TMP_Text weaponLevelText;
+    [SerializeField] Slider weaponQuantityBar;
+    [SerializeField] TMP_Text weaponQuantityText;
     [SerializeField] int weaponCount;
     Color myColor;
 
-    public WeaponInfo(string name, int quantity,int level, EquipmentType type, Rarity rarity, int enhancementLevel, string equippedEffect, string ownedEffect, string enhancementEffect) : base(name, quantity,level, type, rarity, enhancementLevel, equippedEffect, ownedEffect, enhancementEffect)
+    public WeaponInfo(string name, int quantity,int level, EquipmentType type, Rarity rarity, int enhancementLevel, int equippedEffect, int ownedEffect, string enhancementEffect) : base(name, quantity,level, type, rarity, enhancementLevel, equippedEffect, ownedEffect, enhancementEffect)
     {
         this.name = name;
         this.quantity = quantity;
@@ -38,7 +41,7 @@ public class WeaponInfo : Equipment
         this.enhancementEffect = targetInfo.enhancementEffect;
         this.myColor = targetInfo.myColor;
     }
-    public void SetWeaponInfo(string name, int quantity,int level, EquipmentType type, Rarity rarity, int enhancementLevel, string equippedEffect, string ownedEffect, string enhancementEffect, Color myColor)
+    public void SetWeaponInfo(string name, int quantity,int level, EquipmentType type, Rarity rarity, int enhancementLevel, int equippedEffect, int ownedEffect, string enhancementEffect, Color myColor)
     {
         this.name = name;
         this.quantity = quantity;
@@ -54,11 +57,18 @@ public class WeaponInfo : Equipment
         SetUI();
     }
 
-
     public void SetUI()
     {
         SetBackgroundColor();
         SetLevelText();
+        SetQuantityUI();
+    }
+
+    public override void SetQuantityUI()
+    {
+        Debug.Log("Quantity : " + quantity);
+        weaponQuantityBar.value = quantity;
+        weaponQuantityText.text = $"{quantity}/4";
     }
 
     void SetBackgroundColor()

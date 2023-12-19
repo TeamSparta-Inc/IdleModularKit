@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
 
-enum StatusType { ATK, HP, DEF, CRIT_CH, CRIT_DMG }
+public enum StatusType { ATK, HP, DEF, CRIT_CH, CRIT_DMG }
 
 [Serializable]
 struct UpgradeData
@@ -19,11 +19,11 @@ struct UpgradeData
     public int pricePercent;
     public int increase;
 
-    public Action<int> OnStatusUpgrade;
+    public Action<StatusType,int> OnStatusUpgrade;
 
     public float critUpgradeValue;
     public float critIncrease;
-    public Action<float> OnCritStatusUpgrade;
+    public Action<StatusType,float> OnCritStatusUpgrade;
 
     public TMP_Text upgradeLevelText;
     public TMP_Text upgradeValueText;
@@ -48,7 +48,7 @@ struct UpgradeData
         upgradePrice = upgradePrice + (upgradePrice / 100 * pricePercent);
 
         ES3.Save<int>($"{statusType}UpgradeLevel", upgradeLevel);
-        OnStatusUpgrade?.Invoke(increase);
+        OnStatusUpgrade?.Invoke(statusType,increase);
     }
 
     public void CritStatusUpdate()
@@ -58,7 +58,7 @@ struct UpgradeData
         upgradePrice = upgradePrice + (upgradePrice / 100 * pricePercent);
 
         ES3.Save<int>($"{statusType}UpgradeLevel", upgradeLevel);
-        OnCritStatusUpgrade?.Invoke(critIncrease);
+        OnCritStatusUpgrade?.Invoke(statusType,critIncrease);
     }
 
     public void LoadLevelforStatus()
@@ -68,7 +68,7 @@ struct UpgradeData
             upgradeValue += increase;
             upgradePrice = upgradePrice + (upgradePrice / 100 * pricePercent);
 
-            OnStatusUpgrade?.Invoke(increase);
+            OnStatusUpgrade?.Invoke(statusType,increase);
         }
     }
 
@@ -79,14 +79,14 @@ struct UpgradeData
             critUpgradeValue += critIncrease;
             upgradePrice = upgradePrice + (upgradePrice / 100 * pricePercent);
 
-            OnCritStatusUpgrade?.Invoke(critIncrease);
+            OnCritStatusUpgrade?.Invoke(statusType,critIncrease);
         }
     }
 
 
     public UpgradeData(StatusType statusType, int upgradeLevel, BigInteger upgradePrice, int pricePercent,
         TMP_Text upgradeLevelText, TMP_Text upgradeValueText, TMP_Text upgradePriceText, Button upgradeBtn,
-        int increase = 0, BigInteger upgradeValue = null, Action<int> OnStatusUpgrade = null, float critIncrease = 0, float critUpgradeValue = 0, Action<float> OnCritStatusUpgrade = null)
+        int increase = 0, BigInteger upgradeValue = null, Action<StatusType,int> OnStatusUpgrade = null, float critIncrease = 0, float critUpgradeValue = 0, Action<StatusType,float> OnCritStatusUpgrade = null)
     {
         this.statusType = statusType;
         this.upgradeLevel = upgradeLevel;
@@ -117,13 +117,13 @@ struct UpgradeData
 
 
 
-public class statusUpgradeManager : MonoBehaviour
+public class StatusUpgradeManager : MonoBehaviour
 {
-    public static event Action<int> OnAttackUpgrade;
-    public static event Action<int> OnHealthUpgrade;
-    public static event Action<int> OnDefenseUpgrade;
-    public static event Action<float> OnCritChanceUpgrade;
-    public static event Action<float> OnCritDamageUpgrade;
+    public static event Action<StatusType,int> OnAttackUpgrade;
+    public static event Action<StatusType, int> OnHealthUpgrade;
+    public static event Action<StatusType,int> OnDefenseUpgrade;
+    public static event Action<StatusType,float> OnCritChanceUpgrade;
+    public static event Action<StatusType,float> OnCritDamageUpgrade;
 
     [Header("[능력치 조정]")]
     [Header("[공격력]")]

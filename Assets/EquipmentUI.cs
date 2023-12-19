@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using TMPro;
+using UnityEngine.UI;
 
 public class EquipmentUI : MonoBehaviour
 {
@@ -16,6 +17,9 @@ public class EquipmentUI : MonoBehaviour
     [SerializeField] TMP_Text selectEquipment_ownedEffect;
     [SerializeField] TMP_Text selectEquipment_enhancementLevel;
 
+    [SerializeField] Button equipBtn;
+    [SerializeField] Button unEquipBtn;
+
     private void Awake()
     {
         instance = this;
@@ -24,6 +28,9 @@ public class EquipmentUI : MonoBehaviour
     private void Start()
     {
         OnClickSelectEquipment += SelectEquipment;
+
+        equipBtn.onClick.AddListener(OnEquip);
+        //unEquipBtn.onClick.AddListener(OnUnEquip);
     }
 
 
@@ -40,6 +47,7 @@ public class EquipmentUI : MonoBehaviour
         switch (selectEquipment.type)
         {
             case EquipmentType.Weapon:
+                equipment.SetQuantityUI();
                 selectEquipment.GetComponent<WeaponInfo>().SetWeaponInfo(equipment.GetComponent<WeaponInfo>());
                 selectEquipment.GetComponent<WeaponInfo>().SetUI();
                 break;
@@ -47,10 +55,22 @@ public class EquipmentUI : MonoBehaviour
         SetselectEquipmentTextUI(equipment);
     }
 
+
     void SetselectEquipmentTextUI(Equipment equipment)
     {
         selectEquipmentName.text = equipment.name;
-        selectEquipment_equippedEffect.text = equipment.equippedEffect;
-        selectEquipment_ownedEffect.text = equipment.ownedEffect;
+        selectEquipment_equippedEffect.text = $"{equipment.equippedEffect}%";
+        selectEquipment_ownedEffect.text = $"{equipment.ownedEffect}%";
+    }
+
+
+    public void OnEquip()
+    {
+        Debug.Log("장착 됨 ");
+        Player.OnEquip?.Invoke(selectEquipment);
+    }
+    public void OnUnEquip()
+    {
+        Player.OnUnEquip?.Invoke(selectEquipment.type); 
     }
 }
