@@ -43,7 +43,9 @@ public class EquipmentManager : MonoBehaviour
                 
 
                 string name = $"{rarity}_{level}";// Weapon Lv
-                int equippedEffect = (level * 10) * rarityIntValue;
+                //int equippedEffect = (level * 10) * ((rarityIntValue+1) *10);
+                int equippedEffect = level * ((int)Mathf.Pow(10, rarityIntValue+1));
+
                 int ownedEffect = (level * 2) * rarityIntValue;
                 string equippedEffectText = $"{equippedEffect}%";//Basic attack power increased by 
                 string ownedEffectText = $"{ownedEffect}%"; //Overall damage increased by 
