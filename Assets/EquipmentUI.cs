@@ -30,7 +30,7 @@ public class EquipmentUI : MonoBehaviour
         OnClickSelectEquipment += SelectEquipment;
 
         equipBtn.onClick.AddListener(OnEquip);
-        //unEquipBtn.onClick.AddListener(OnUnEquip);
+        unEquipBtn.onClick.AddListener(OnUnEquip);
     }
 
 
@@ -50,6 +50,7 @@ public class EquipmentUI : MonoBehaviour
                 equipment.SetQuantityUI();
                 selectEquipment.GetComponent<WeaponInfo>().SetWeaponInfo(equipment.GetComponent<WeaponInfo>());
                 selectEquipment.GetComponent<WeaponInfo>().SetUI();
+                SetOnEquippedBtnUI(selectEquipment.OnEquipped);
                 break;
         }
         SetselectEquipmentTextUI(equipment);
@@ -63,14 +64,40 @@ public class EquipmentUI : MonoBehaviour
         selectEquipment_ownedEffect.text = $"{equipment.ownedEffect}%";
     }
 
+    void SetOnEquippedBtnUI(bool Onequipped)
+    {
+        if (Onequipped)
+        {
+            equipBtn.gameObject.SetActive(false);
+            unEquipBtn.gameObject.SetActive(true);
+        }
+        else
+        {
+        equipBtn.gameObject.SetActive(true);
+        unEquipBtn.gameObject.SetActive(false);
+        }
+    }
+
+
+    public void UpdateSelectEquipmentData()
+    {
+        EquipmentManager.SetEquipment(selectEquipment.name, selectEquipment);
+    }
 
     public void OnEquip()
     {
         Debug.Log("장착 됨 ");
+        selectEquipment.OnEquipped = true;
+        SetOnEquippedBtnUI(selectEquipment.OnEquipped);
         Player.OnEquip?.Invoke(selectEquipment);
+        UpdateSelectEquipmentData();
     }
+
     public void OnUnEquip()
     {
-        Player.OnUnEquip?.Invoke(selectEquipment.type); 
+        selectEquipment.OnEquipped = false;
+        SetOnEquippedBtnUI(selectEquipment.OnEquipped);
+        Player.OnUnEquip?.Invoke(selectEquipment.type);
+        UpdateSelectEquipmentData();
     }
 }

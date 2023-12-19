@@ -129,8 +129,8 @@ public class Player : MonoBehaviour
             case EquipmentType.Weapon:
                 Debug.Log("차감 : " + unEquiped_WeaponEffect);
                 status.DecreaseBaseStatByPercent(StatusType.ATK, unEquiped_WeaponEffect);
-                //unEquiped_Weapon = null;
-                break;
+                unEquiped_WeaponEffect = 0;
+                    break;
         }
 
     }

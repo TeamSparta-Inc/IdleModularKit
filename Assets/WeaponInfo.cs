@@ -15,16 +15,17 @@ public class WeaponInfo : Equipment
     [SerializeField] int weaponCount;
     Color myColor;
 
-    public WeaponInfo(string name, int quantity,int level, EquipmentType type, Rarity rarity, int enhancementLevel, int equippedEffect, int ownedEffect, string enhancementEffect) : base(name, quantity,level, type, rarity, enhancementLevel, equippedEffect, ownedEffect, enhancementEffect)
+    public WeaponInfo(string name, int quantity,int level, bool OnEquipped, EquipmentType type, Rarity rarity, int enhancementLevel, int basicEquippedEffect, int basicOwnedEffect, string enhancementEffect) : base(name, quantity,level,OnEquipped, type, rarity, enhancementLevel, basicEquippedEffect, basicOwnedEffect, enhancementEffect)
     {
         this.name = name;
         this.quantity = quantity;
         this.level = level;
+        this.OnEquipped = OnEquipped;
         this.type = type;
         this.rarity = rarity;
         this.enhancementLevel = enhancementLevel;
-        this.equippedEffect = equippedEffect;
-        this.ownedEffect = ownedEffect;
+        this.basicEquippedEffect = basicEquippedEffect;
+        this.basicOwnedEffect = basicOwnedEffect;
         this.enhancementEffect = enhancementEffect;
     }
 
@@ -33,6 +34,7 @@ public class WeaponInfo : Equipment
         this.name = targetInfo.name;
         this.quantity = targetInfo.quantity;
         this.level = targetInfo.level;
+        this.OnEquipped = targetInfo.OnEquipped;
         this.type = targetInfo.type;
         this.rarity = targetInfo.rarity;
         this.enhancementLevel = targetInfo.enhancementLevel;
@@ -41,11 +43,12 @@ public class WeaponInfo : Equipment
         this.enhancementEffect = targetInfo.enhancementEffect;
         this.myColor = targetInfo.myColor;
     }
-    public void SetWeaponInfo(string name, int quantity,int level, EquipmentType type, Rarity rarity, int enhancementLevel, int equippedEffect, int ownedEffect, string enhancementEffect, Color myColor)
+    public void SetWeaponInfo(string name, int quantity,int level, bool OnEquipped, EquipmentType type, Rarity rarity, int enhancementLevel, int equippedEffect, int ownedEffect, string enhancementEffect, Color myColor)
     {
         this.name = name;
         this.quantity = quantity;
         this.level = level;
+        this.OnEquipped = OnEquipped;
         this.type = type;
         this.rarity = rarity;
         this.enhancementLevel = enhancementLevel;
