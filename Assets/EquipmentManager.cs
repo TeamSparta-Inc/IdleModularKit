@@ -51,10 +51,9 @@ public class EquipmentManager : MonoBehaviour
                 int ownedEffect = (int)(equippedEffect * 0.5f);
                 string equippedEffectText = $"{equippedEffect}%";//Basic attack power increased by 
                 string ownedEffectText = $"{ownedEffect}%"; //Overall damage increased by 
-                string enhancementEffect = $"At Lv{level * 50}, attack power increased by {level * 100}%";
 
                 weapon.SetWeaponInfo(name, 1, level, false, EquipmentType.Weapon, rarity,
-                                 level, equippedEffect, ownedEffect, enhancementEffect, colors[rarityIntValue]);
+                                 level, equippedEffect, ownedEffect, colors[rarityIntValue]);
 
                 weapon.GetComponent<Button>().onClick.AddListener(() => EquipmentUI.TriggerSelectEquipment(weapon));
 

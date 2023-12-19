@@ -19,6 +19,7 @@ public class EquipmentUI : MonoBehaviour
 
     [SerializeField] Button equipBtn;
     [SerializeField] Button unEquipBtn;
+    [SerializeField] Button enhanceBtn;
 
     private void Awake()
     {
@@ -29,8 +30,9 @@ public class EquipmentUI : MonoBehaviour
     {
         OnClickSelectEquipment += SelectEquipment;
 
-        equipBtn.onClick.AddListener(OnEquip);
-        unEquipBtn.onClick.AddListener(OnUnEquip);
+        equipBtn.onClick.AddListener(OnClickEquip);
+        unEquipBtn.onClick.AddListener(OnClickUnEquip);
+        enhanceBtn.onClick.AddListener(OnClickEnhance);
     }
 
 
@@ -79,12 +81,17 @@ public class EquipmentUI : MonoBehaviour
     }
 
 
-    public void UpdateSelectEquipmentData()
+    
+
+    public void OnClickEnhance()
     {
-        EquipmentManager.SetEquipment(selectEquipment.name, selectEquipment);
+        selectEquipment.Enhance();
+        SetselectEquipmentTextUI(selectEquipment);
+
+        UpdateSelectEquipmentData();
     }
 
-    public void OnEquip()
+    public void OnClickEquip()
     {
         Debug.Log("장착 됨 ");
         selectEquipment.OnEquipped = true;
@@ -93,11 +100,16 @@ public class EquipmentUI : MonoBehaviour
         UpdateSelectEquipmentData();
     }
 
-    public void OnUnEquip()
+    public void OnClickUnEquip()
     {
         selectEquipment.OnEquipped = false;
         SetOnEquippedBtnUI(selectEquipment.OnEquipped);
         Player.OnUnEquip?.Invoke(selectEquipment.type);
         UpdateSelectEquipmentData();
+    }
+
+    public void UpdateSelectEquipmentData()
+    {
+        EquipmentManager.SetEquipment(selectEquipment.name, selectEquipment);
     }
 }

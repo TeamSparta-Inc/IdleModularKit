@@ -39,11 +39,10 @@ public class Equipment : MonoBehaviour
     public int equippedEffect;  // 장착효과
     public int basicOwnedEffect;
     public int ownedEffect;     // 보유효과
-    public string enhancementEffect; // 강화효과
 
 
     public Equipment(string name, int quantity, int level, bool OnEquipped, EquipmentType type, Rarity rarity,
-                 int enhancementLevel, int basicEquippedEffect, int basicOwnedEffect, string enhancementEffect)
+                 int enhancementLevel, int basicEquippedEffect, int basicOwnedEffect)
     {
         this.name = name;
         this.quantity = quantity;
@@ -54,14 +53,17 @@ public class Equipment : MonoBehaviour
         this.enhancementLevel = enhancementLevel;
         this.basicEquippedEffect = basicEquippedEffect;
         this.basicOwnedEffect = basicOwnedEffect;
-        this.enhancementEffect = enhancementEffect;
+
+        equippedEffect = this.basicEquippedEffect;
+        ownedEffect = this.basicOwnedEffect;
     }
 
     // 강화 메서드
     public virtual void Enhance()
     {
         // 강화 로직...
-        
+        equippedEffect += basicEquippedEffect;
+        ownedEffect += basicOwnedEffect;
 
         enhancementLevel++;
         // 강화효과 업데이트...

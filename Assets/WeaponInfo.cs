@@ -15,7 +15,7 @@ public class WeaponInfo : Equipment
     [SerializeField] int weaponCount;
     Color myColor;
 
-    public WeaponInfo(string name, int quantity,int level, bool OnEquipped, EquipmentType type, Rarity rarity, int enhancementLevel, int basicEquippedEffect, int basicOwnedEffect, string enhancementEffect) : base(name, quantity,level,OnEquipped, type, rarity, enhancementLevel, basicEquippedEffect, basicOwnedEffect, enhancementEffect)
+    public WeaponInfo(string name, int quantity,int level, bool OnEquipped, EquipmentType type, Rarity rarity, int enhancementLevel, int basicEquippedEffect, int basicOwnedEffect) : base(name, quantity,level,OnEquipped, type, rarity, enhancementLevel, basicEquippedEffect, basicOwnedEffect)
     {
         this.name = name;
         this.quantity = quantity;
@@ -26,7 +26,6 @@ public class WeaponInfo : Equipment
         this.enhancementLevel = enhancementLevel;
         this.basicEquippedEffect = basicEquippedEffect;
         this.basicOwnedEffect = basicOwnedEffect;
-        this.enhancementEffect = enhancementEffect;
     }
 
     public void SetWeaponInfo(WeaponInfo targetInfo)
@@ -38,12 +37,14 @@ public class WeaponInfo : Equipment
         this.type = targetInfo.type;
         this.rarity = targetInfo.rarity;
         this.enhancementLevel = targetInfo.enhancementLevel;
-        this.equippedEffect = targetInfo.equippedEffect;
-        this.ownedEffect = targetInfo.ownedEffect;
-        this.enhancementEffect = targetInfo.enhancementEffect;
+        this.basicEquippedEffect = targetInfo.basicEquippedEffect;
+        this.basicOwnedEffect = targetInfo.basicOwnedEffect;
         this.myColor = targetInfo.myColor;
+
+        equippedEffect = this.basicEquippedEffect;
+        ownedEffect = this.basicOwnedEffect;
     }
-    public void SetWeaponInfo(string name, int quantity,int level, bool OnEquipped, EquipmentType type, Rarity rarity, int enhancementLevel, int equippedEffect, int ownedEffect, string enhancementEffect, Color myColor)
+    public void SetWeaponInfo(string name, int quantity,int level, bool OnEquipped, EquipmentType type, Rarity rarity, int enhancementLevel, int basicEquippedEffect, int basicOwnedEffect, Color myColor)
     {
         this.name = name;
         this.quantity = quantity;
@@ -52,10 +53,12 @@ public class WeaponInfo : Equipment
         this.type = type;
         this.rarity = rarity;
         this.enhancementLevel = enhancementLevel;
-        this.equippedEffect = equippedEffect;
-        this.ownedEffect = ownedEffect;
-        this.enhancementEffect = enhancementEffect;
+        this.basicEquippedEffect = basicEquippedEffect;
+        this.basicOwnedEffect = basicOwnedEffect;
         this.myColor = myColor;
+
+        equippedEffect = this.basicEquippedEffect;
+        ownedEffect = this.basicOwnedEffect;
 
         SetUI();
     }
