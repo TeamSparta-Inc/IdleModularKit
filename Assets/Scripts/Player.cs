@@ -35,14 +35,7 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         instance = this;
-    }
-    private void Update()
-    {
-        Debug.Log($"이거다 : {currentAttack}");
-    }
 
-    private void Start()
-    {
         StatusUpgradeManager.OnAttackUpgrade += status.IncreaseBaseStat;
         StatusUpgradeManager.OnHealthUpgrade += status.IncreaseBaseStat;
         StatusUpgradeManager.OnDefenseUpgrade += status.IncreaseBaseStat;
@@ -52,6 +45,15 @@ public class Player : MonoBehaviour
 
         OnEquip += Equip;
         OnUnEquip += UnEquip;
+    }
+    private void Update()
+    {
+        Debug.Log($"이거다 : {currentAttack}");
+    }
+
+    private void Start()
+    {
+        
     }
 
     public BigInteger GetCurrentStatus(StatusType statusType)
@@ -109,7 +111,6 @@ public class Player : MonoBehaviour
                 }
 
                 equiped_Weapon = equipment.GetComponent<WeaponInfo>();
-                Debug.Log("장착 강화 한다 ! " + equiped_Weapon.equippedEffect);
 
                 status.IncreaseBaseStatByPercent(StatusType.ATK, equiped_Weapon.equippedEffect);
 
@@ -118,8 +119,6 @@ public class Player : MonoBehaviour
                 break;
         }
     }
-
-
 
     public void UnEquip(EquipmentType equipmentType)
     {
@@ -134,4 +133,5 @@ public class Player : MonoBehaviour
         }
 
     }
+
 }

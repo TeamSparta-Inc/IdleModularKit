@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using TMPro;
 using UnityEngine.UI;
+using Keiwando.BigInteger;
 
 public class EquipmentUI : MonoBehaviour
 {
@@ -62,7 +63,7 @@ public class EquipmentUI : MonoBehaviour
     void SetselectEquipmentTextUI(Equipment equipment)
     {
         selectEquipmentName.text = equipment.name;
-        selectEquipment_equippedEffect.text = $"{equipment.equippedEffect}%";
+        selectEquipment_equippedEffect.text = $"{BigInteger.ChangeMoney(equipment.equippedEffect.ToString())}%";
         selectEquipment_ownedEffect.text = $"{equipment.ownedEffect}%";
     }
 
@@ -87,6 +88,9 @@ public class EquipmentUI : MonoBehaviour
     {
         selectEquipment.Enhance();
         SetselectEquipmentTextUI(selectEquipment);
+
+
+        if (selectEquipment.OnEquipped) OnClickEquip();
 
         UpdateSelectEquipmentData();
     }
