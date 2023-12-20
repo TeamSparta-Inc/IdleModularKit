@@ -89,6 +89,8 @@ public class EquipmentUI : MonoBehaviour
     {
         EquipmentManager.instance.Composite(selectEquipment);
 
+        selectEquipment.SetQuantityUI();
+
         UpdateSelectEquipmentData();
     }
 

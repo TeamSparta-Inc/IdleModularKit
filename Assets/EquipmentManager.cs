@@ -85,7 +85,6 @@ public class EquipmentManager : MonoBehaviour
 
         nextEquipment.quantity += compositeCount;
 
-        equipment.SetQuantityUI();
         nextEquipment.SetQuantityUI();
 
         return compositeCount;
@@ -119,11 +118,14 @@ public class EquipmentManager : MonoBehaviour
 
     public static void SetEquipment(string equipmentName, Equipment equipment)
     {
+        Equipment targetEquipment = allEquipment[equipmentName];
         Debug.Log("이름 : "+ allEquipment[equipmentName].gameObject.name);
-        allEquipment[equipmentName].equippedEffect = equipment.equippedEffect;
-        allEquipment[equipmentName].ownedEffect = equipment.ownedEffect;
-        allEquipment[equipmentName].quantity = equipment.quantity;
-        allEquipment[equipmentName].OnEquipped = equipment.OnEquipped;
+        targetEquipment.equippedEffect = equipment.equippedEffect;
+        targetEquipment.ownedEffect = equipment.ownedEffect;
+        targetEquipment.quantity = equipment.quantity;
+        targetEquipment.OnEquipped = equipment.OnEquipped;
+
+        targetEquipment.SetQuantityUI();
     }
 
 
