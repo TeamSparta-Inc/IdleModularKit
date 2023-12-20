@@ -15,15 +15,13 @@ public class EquipmentManager : MonoBehaviour
     [SerializeField]
     public static Dictionary<string, Equipment> allEquipment = new Dictionary<string, Equipment>();
 
-    WeaponInfo[] weaponss;
+    //WeaponInfo[] weaponss;
 
     Rarity[] rarities = { Rarity.Common, Rarity.Uncommon, Rarity.Rare, Rarity.Epic, Rarity.Ancient, Rarity.Legendary, Rarity.Mythology };
     //string[] rarityOrder = { "Common", "Uncommon", "Rare", "Epic", "Ancient", "Legendary", "Mythology" };
 
     //string[] colorsHex = { "#333333", "#3CB371", "#4169E1", "#7058A3", "#FFA500", "#C9BC46", "#DF6464" };
     [SerializeField] Color[] colors;
-
-
 
     int maxLevel = 4;
 
@@ -32,27 +30,68 @@ public class EquipmentManager : MonoBehaviour
         instance = this;
     }
 
-    private void Start()
+    public void InitEquipmentManager()
     {
         SetAllWeapons();
     }
 
     void SetAllWeapons()
     {
+        if (ES3.KeyExists("Init_Game"))
+        {
+            LoadAllWeapon();
+        }
+        else
+        {
+            CreateAllWeapon();
+        }
+    }
+
+
+    public void LoadAllWeapon()
+    {
         int weaponCount = 0;
         int rarityIntValue = 0;
-        foreach(Rarity rarity in rarities)
+
+        foreach (Rarity rarity in rarities)
+        {
+            rarityIntValue = Convert.ToInt32(rarity);
+            for (int level = 1; level <= maxLevel; level++)
+            {
+                string name = $"{rarity}_{level}";
+                WeaponInfo weapon = weapons[weaponCount];
+
+                weapon.LoadEquipment(name);
+
+                weapon.GetComponent<Button>().onClick.AddListener(() => EquipmentUI.TriggerSelectEquipment(weapon));
+
+                allEquipment.Add(name, weapon);
+
+                weaponCount++;
+
+                // 임시
+                weapon.myColor = colors[rarityIntValue];
+                weapon.SetUI();
+            }
+        }
+    }
+
+    void CreateAllWeapon()
+    {
+        int weaponCount = 0;
+        int rarityIntValue = 0;
+
+        foreach (Rarity rarity in rarities)
         {
             if (rarity == Rarity.None) continue;
             rarityIntValue = Convert.ToInt32(rarity);
-            for (int level =1; level <= maxLevel; level++)
+            for (int level = 1; level <= maxLevel; level++)
             {
                 WeaponInfo weapon = weapons[weaponCount];
 
-                
-
                 string name = $"{rarity}_{level}";// Weapon Lv
-                int equippedEffect = level * ((int)Mathf.Pow(10, rarityIntValue+1));
+
+                int equippedEffect = level * ((int)Mathf.Pow(10, rarityIntValue + 1));
                 int ownedEffect = (int)(equippedEffect * 0.5f);
                 string equippedEffectText = $"{equippedEffect}%";//Basic attack power increased by 
                 string ownedEffectText = $"{ownedEffect}%"; //Overall damage increased by 
@@ -62,17 +101,14 @@ public class EquipmentManager : MonoBehaviour
 
                 weapon.GetComponent<Button>().onClick.AddListener(() => EquipmentUI.TriggerSelectEquipment(weapon));
 
-                AddEquipment(name,weapon);
+                AddEquipment(name, weapon);
 
-                Debug.Log(colors.Length);
-                //weapon.SetUI();
-
+                weapon.SaveEquipment(name);
 
                 weaponCount++;
             }
         }
     }
-
 
     public int Composite(Equipment equipment)
     {
@@ -86,6 +122,8 @@ public class EquipmentManager : MonoBehaviour
         nextEquipment.quantity += compositeCount;
 
         nextEquipment.SetQuantityUI();
+
+        nextEquipment.SaveEquipment(nextEquipment.name);
 
         return compositeCount;
     }
@@ -126,6 +164,8 @@ public class EquipmentManager : MonoBehaviour
         targetEquipment.OnEquipped = equipment.OnEquipped;
 
         targetEquipment.SetQuantityUI();
+
+        targetEquipment.SaveEquipment(targetEquipment.name);
     }
 
 

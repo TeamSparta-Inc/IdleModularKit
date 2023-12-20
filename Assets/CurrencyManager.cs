@@ -20,10 +20,13 @@ public class CurrencyManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+    }
+
+    public void InitCurrencyManager()
+    {
         OnCurrencyChanged += UpdateCurrencyUI;
         LoadCurrencies();
     }
-
 
     // 측정 통화를 증가시키는 메서드
     public void AddCurrency(string currencyName, BigInteger value)

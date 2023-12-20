@@ -12,7 +12,7 @@ public class WeaponInfo : Equipment
     [SerializeField] TMP_Text weaponLevelText;
     [SerializeField] Slider weaponQuantityBar;
     [SerializeField] TMP_Text weaponQuantityText;
-    Color myColor;
+    public Color myColor;
 
     public WeaponInfo(string name, int quantity,int level, bool OnEquipped, EquipmentType type, Rarity rarity, int enhancementLevel, int basicEquippedEffect, int basicOwnedEffect) : base(name, quantity,level,OnEquipped, type, rarity, enhancementLevel, basicEquippedEffect, basicOwnedEffect)
     {

@@ -125,6 +125,9 @@ public class StatusUpgradeManager : MonoBehaviour
     public static event Action<StatusType,float> OnCritChanceUpgrade;
     public static event Action<StatusType,float> OnCritDamageUpgrade;
 
+    public static StatusUpgradeManager instance;
+
+
     [Header("[능력치 조정]")]
     [Header("[공격력]")]
     [Header("[초기 값, 증가량, 초기 비용, 증가율]")]
@@ -202,10 +205,13 @@ public class StatusUpgradeManager : MonoBehaviour
     UpgradeData critChanceUpgradeData;
     UpgradeData critDamageUpgradeData;
 
-
-    private void Start()
+    private void Awake()
     {
+        instance = this;
+    }
 
+    public void InitStatusUpgradeManager()
+    {
         InitializeButtonListeners();
         InitializeUpgradeData();
         SetUpgradeUI_ALL();

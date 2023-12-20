@@ -46,10 +46,7 @@ public class Player : MonoBehaviour
         OnEquip += Equip;
         OnUnEquip += UnEquip;
     }
-    private void Update()
-    {
-        Debug.Log($"이거다 : {currentAttack.ChangeMoney()}");
-    }
+  
 
     private void Start()
     {

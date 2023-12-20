@@ -27,6 +27,7 @@ public enum Rarity
 }
 
 
+
 public class Equipment : MonoBehaviour
 {
     public string name;          // 장비의 이름
@@ -104,5 +105,48 @@ public class Equipment : MonoBehaviour
 
     public virtual void SetQuantityUI()
     {
+    }
+
+
+
+    // 장비 데이터를 ES3 파일에 저장
+    public void SaveEquipment(string equipmentID)
+    {
+        Debug.Log("장비 정보 저장 " + equipmentID);
+
+        ES3.Save<string>("name_" + equipmentID, name);
+        ES3.Save<int>("quantity_" + equipmentID, quantity);
+        ES3.Save<int>("level_" + equipmentID, level);
+        ES3.Save<bool>("onEquipped_" + equipmentID, OnEquipped);
+        ES3.Save<EquipmentType>("type_" + equipmentID, type);
+        ES3.Save<Rarity>("rarity_" + equipmentID, rarity);
+        ES3.Save<int>("enhancementLevel_"+ equipmentID, enhancementLevel);
+        ES3.Save<int>("basicEquippedEffect_" + equipmentID, basicEquippedEffect);
+        ES3.Save<int>("basicOwnedEffect_" + equipmentID, basicOwnedEffect);
+
+        ES3.Save<BigInteger>("equippedEffect_" + equipmentID, equippedEffect);
+        ES3.Save<BigInteger>("ownedEffect_" + equipmentID, ownedEffect);
+    }
+
+    // 장비 데이터를 ES3 파일에서 불러오기
+    public void LoadEquipment(string equipmentID)
+    {
+        if (!ES3.KeyExists("name_" + equipmentID)) return;
+
+        Debug.Log("장비 정보 불러오기 " + equipmentID);
+
+        name = ES3.Load<string>("name_" + equipmentID);
+        quantity = ES3.Load<int>("quantity_" + equipmentID);
+        level = ES3.Load<int>("level_" + equipmentID);
+        OnEquipped = ES3.Load<bool>("onEquipped_" + equipmentID);
+        type = ES3.Load<EquipmentType>("type_" + equipmentID);
+        rarity = ES3.Load<Rarity>("rarity_" + equipmentID);
+        enhancementLevel = ES3.Load<int>("enhancementLevel_" + equipmentID);
+        basicEquippedEffect = ES3.Load<int>("basicEquippedEffect_" + equipmentID);
+        basicOwnedEffect = ES3.Load<int>("basicOwnedEffect_" + equipmentID);
+
+        equippedEffect = ES3.Load<BigInteger>("equippedEffect_" + equipmentID);
+        ownedEffect = ES3.Load<BigInteger>("ownedEffect_" + equipmentID);
+
     }
 }
