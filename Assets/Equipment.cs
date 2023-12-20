@@ -110,6 +110,23 @@ public class Equipment : MonoBehaviour
 
 
     // 장비 데이터를 ES3 파일에 저장
+    public void SaveEquipment()
+    {
+        Debug.Log("장비 정보 저장 " + name);
+
+        ES3.Save<string>("name_" + name, name);
+        ES3.Save<int>("quantity_" + name, quantity);
+        ES3.Save<int>("level_" + name, level);
+        ES3.Save<bool>("onEquipped_" + name, OnEquipped);
+        ES3.Save<EquipmentType>("type_" + name, type);
+        ES3.Save<Rarity>("rarity_" + name, rarity);
+        ES3.Save<int>("enhancementLevel_"+ name, enhancementLevel);
+        ES3.Save<int>("basicEquippedEffect_" + name, basicEquippedEffect);
+        ES3.Save<int>("basicOwnedEffect_" + name, basicOwnedEffect);
+
+        ES3.Save<string>("equippedEffect_" + name, equippedEffect.ToString());
+        ES3.Save<string>("ownedEffect_" + name, ownedEffect.ToString());
+    }
     public void SaveEquipment(string equipmentID)
     {
         Debug.Log("장비 정보 저장 " + equipmentID);
@@ -124,11 +141,31 @@ public class Equipment : MonoBehaviour
         ES3.Save<int>("basicEquippedEffect_" + equipmentID, basicEquippedEffect);
         ES3.Save<int>("basicOwnedEffect_" + equipmentID, basicOwnedEffect);
 
-        ES3.Save<BigInteger>("equippedEffect_" + equipmentID, equippedEffect);
-        ES3.Save<BigInteger>("ownedEffect_" + equipmentID, ownedEffect);
+        ES3.Save<string>("equippedEffect_" + equipmentID, equippedEffect.ToString());
+        ES3.Save<string>("ownedEffect_" + equipmentID, ownedEffect.ToString());
     }
 
     // 장비 데이터를 ES3 파일에서 불러오기
+    public void LoadEquipment()
+    {
+        if (!ES3.KeyExists("name_" + name)) return;
+
+        Debug.Log("장비 정보 불러오기 " + name);
+
+        name = ES3.Load<string>("name_" + name);
+        quantity = ES3.Load<int>("quantity_" + name);
+        level = ES3.Load<int>("level_" + name);
+        OnEquipped = ES3.Load<bool>("onEquipped_" + name);
+        type = ES3.Load<EquipmentType>("type_" + name);
+        rarity = ES3.Load<Rarity>("rarity_" + name);
+        enhancementLevel = ES3.Load<int>("enhancementLevel_" + name);
+        basicEquippedEffect = ES3.Load<int>("basicEquippedEffect_" + name);
+        basicOwnedEffect = ES3.Load<int>("basicOwnedEffect_" + name);
+
+        equippedEffect = new BigInteger(ES3.Load<string>("equippedEffect_" + name));
+        ownedEffect = new BigInteger(ES3.Load<string>("ownedEffect_" + name));
+
+    }
     public void LoadEquipment(string equipmentID)
     {
         if (!ES3.KeyExists("name_" + equipmentID)) return;
@@ -145,8 +182,10 @@ public class Equipment : MonoBehaviour
         basicEquippedEffect = ES3.Load<int>("basicEquippedEffect_" + equipmentID);
         basicOwnedEffect = ES3.Load<int>("basicOwnedEffect_" + equipmentID);
 
-        equippedEffect = ES3.Load<BigInteger>("equippedEffect_" + equipmentID);
-        ownedEffect = ES3.Load<BigInteger>("ownedEffect_" + equipmentID);
+        equippedEffect = new BigInteger(ES3.Load<string>("equippedEffect_" + equipmentID));
+        ownedEffect = new BigInteger(ES3.Load<string>("ownedEffect_" + equipmentID));
 
     }
+
+
 }

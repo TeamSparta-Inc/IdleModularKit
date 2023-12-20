@@ -65,7 +65,11 @@ public class EquipmentManager : MonoBehaviour
 
                 weapon.GetComponent<Button>().onClick.AddListener(() => EquipmentUI.TriggerSelectEquipment(weapon));
 
-                allEquipment.Add(name, weapon);
+
+                AddEquipment(name, weapon);
+
+
+                if (weapon.OnEquipped) Player.OnEquip(weapon);
 
                 weaponCount++;
 
@@ -93,8 +97,8 @@ public class EquipmentManager : MonoBehaviour
 
                 int equippedEffect = level * ((int)Mathf.Pow(10, rarityIntValue + 1));
                 int ownedEffect = (int)(equippedEffect * 0.5f);
-                string equippedEffectText = $"{equippedEffect}%";//Basic attack power increased by 
-                string ownedEffectText = $"{ownedEffect}%"; //Overall damage increased by 
+                string equippedEffectText = $"{equippedEffect}%";
+                string ownedEffectText = $"{ownedEffect}%"; 
 
                 weapon.SetWeaponInfo(name, 1, level, false, EquipmentType.Weapon, rarity,
                                  level, equippedEffect, ownedEffect, colors[rarityIntValue]);

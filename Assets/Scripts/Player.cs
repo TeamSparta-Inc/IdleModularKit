@@ -29,7 +29,8 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     WeaponInfo equiped_Weapon = null;
-    BigInteger unEquiped_WeaponEffect = 0;
+    //WeaponInfo unEquiped_Weapon = null;
+    //BigInteger unEquiped_WeaponEffect = 0;
 
 
     private void Awake()
@@ -46,12 +47,7 @@ public class Player : MonoBehaviour
         OnEquip += Equip;
         OnUnEquip += UnEquip;
     }
-  
 
-    private void Start()
-    {
-        
-    }
 
     public BigInteger GetCurrentStatus(StatusType statusType)
     {
@@ -97,22 +93,22 @@ public class Player : MonoBehaviour
 
     public void Equip(Equipment equipment)
     {
+        //equipment.OnEquipped = true;
         switch(equipment.type)
         {
             case EquipmentType.Weapon:
 
-                if (equiped_Weapon != null)
-                {
-                    Debug.Log($"장착! {unEquiped_WeaponEffect} \n {equipment.equippedEffect}");
-                    UnEquip(equipment.type);
-                }
-
+                UnEquip(equipment.type);
+                
                 equiped_Weapon = equipment.GetComponent<WeaponInfo>();
+
+                equiped_Weapon.OnEquipped = true;
 
                 status.IncreaseBaseStatByPercent(StatusType.ATK, equiped_Weapon.equippedEffect);
 
-                unEquiped_WeaponEffect = equiped_Weapon.equippedEffect;
-
+                EquipmentUI.UpdateEquipmentUI?.Invoke(equiped_Weapon.OnEquipped);
+                equiped_Weapon.SaveEquipment();
+                Debug.Log("장비 장착" + equiped_Weapon.name);
                 break;
         }
     }
@@ -123,12 +119,14 @@ public class Player : MonoBehaviour
         switch (equipmentType)
         {
             case EquipmentType.Weapon:
-                Debug.Log("차감 : " + unEquiped_WeaponEffect);
-                status.DecreaseBaseStatByPercent(StatusType.ATK, unEquiped_WeaponEffect);
-                unEquiped_WeaponEffect = 0;
-                    break;
+                if (equiped_Weapon == null) return;
+                equiped_Weapon.OnEquipped = false;
+                EquipmentUI.UpdateEquipmentUI?.Invoke(equiped_Weapon.OnEquipped);
+                status.DecreaseBaseStatByPercent(StatusType.ATK, equiped_Weapon.equippedEffect);
+                equiped_Weapon.SaveEquipment();
+                Debug.Log("장비 장착 해제" + equiped_Weapon.name);
+                equiped_Weapon = null;
+                break;
         }
-
     }
-
 }

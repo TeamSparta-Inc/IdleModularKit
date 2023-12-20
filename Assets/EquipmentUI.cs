@@ -9,6 +9,7 @@ using Keiwando.BigInteger;
 public class EquipmentUI : MonoBehaviour
 {
     public static event Action<Equipment> OnClickSelectEquipment;
+    public static Action<bool> UpdateEquipmentUI;
 
     public static EquipmentUI instance;
 
@@ -31,6 +32,7 @@ public class EquipmentUI : MonoBehaviour
     private void Start()
     {
         OnClickSelectEquipment += SelectEquipment;
+        UpdateEquipmentUI += SetOnEquippedBtnUI;
 
         equipBtn.onClick.AddListener(OnClickEquip);
         unEquipBtn.onClick.AddListener(OnClickUnEquip);
@@ -108,18 +110,14 @@ public class EquipmentUI : MonoBehaviour
     public void OnClickEquip()
     {
         Debug.Log("장착 됨 ");
-        selectEquipment.OnEquipped = true;
-        SetOnEquippedBtnUI(selectEquipment.OnEquipped);
-        Player.OnEquip?.Invoke(selectEquipment);
-        UpdateSelectEquipmentData();
+        Player.OnEquip?.Invoke(EquipmentManager.GetEquipment(selectEquipment.name));
+        //UpdateSelectEquipmentData();
     }
 
     public void OnClickUnEquip()
     {
-        selectEquipment.OnEquipped = false;
-        SetOnEquippedBtnUI(selectEquipment.OnEquipped);
         Player.OnUnEquip?.Invoke(selectEquipment.type);
-        UpdateSelectEquipmentData();
+        //UpdateSelectEquipmentData();
     }
 
     public void UpdateSelectEquipmentData()
