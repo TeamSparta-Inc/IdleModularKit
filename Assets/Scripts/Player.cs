@@ -29,7 +29,7 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     WeaponInfo equiped_Weapon = null;
-    int unEquiped_WeaponEffect = 0;
+    BigInteger unEquiped_WeaponEffect = 0;
 
 
     private void Awake()
@@ -48,7 +48,7 @@ public class Player : MonoBehaviour
     }
     private void Update()
     {
-        Debug.Log($"이거다 : {currentAttack}");
+        Debug.Log($"이거다 : {currentAttack.ChangeMoney()}");
     }
 
     private void Start()

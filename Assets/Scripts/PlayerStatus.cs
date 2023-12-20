@@ -8,23 +8,23 @@ using System;
 public class PlayerStatus : BaseStatus
 {
     [SerializeField]
-    int attackPercent = 0;
+    BigInteger attackPercent = 0;
     BigInteger currentAttackValue = 0;
 
     [SerializeField]
-    int healthPercent = 0;
+    BigInteger healthPercent = 0;
     BigInteger currentHealthValue = 0;
 
     [SerializeField]
-    int defensePercent = 0;
+    BigInteger defensePercent = 0;
     BigInteger currentDefenseValue = 0;
 
     [SerializeField]
-    int critChancePercent = 0;
+    BigInteger critChancePercent = 0;
     BigInteger currentCritChanceValue = 0;
 
     [SerializeField]
-    int critDamagePercent = 0;
+    BigInteger critDamagePercent = 0;
     BigInteger currentCritDamageValue = 0;
 
 
@@ -92,7 +92,7 @@ public class PlayerStatus : BaseStatus
     }
 
 
-    public void IncreaseBaseStatByPercent(StatusType statusType, int addPercent)
+    public void IncreaseBaseStatByPercent(StatusType statusType, BigInteger addPercent)
     {
         switch (statusType)
         {
@@ -114,7 +114,7 @@ public class PlayerStatus : BaseStatus
         }
     }
 
-    public void DecreaseBaseStatByPercent(StatusType statusType, int subtractPercent)
+    public void DecreaseBaseStatByPercent(StatusType statusType, BigInteger subtractPercent)
     {
         switch (statusType)
         {
@@ -137,28 +137,28 @@ public class PlayerStatus : BaseStatus
     }
 
 
-    BigInteger IncreaseBaseStat(ref int baseStat, int addValue, ref BigInteger currentValue, int percent)
+    BigInteger IncreaseBaseStat(ref int baseStat, int addValue, ref BigInteger currentValue, BigInteger percent)
     {
         baseStat += addValue;
         return CalculateTotal(baseStat, percent, ref currentValue);
     }
 
     // 임시
-    BigInteger IncreaseBaseStat(ref float baseStat, float addValue, ref BigInteger currentValue, int percent)
+    BigInteger IncreaseBaseStat(ref float baseStat, float addValue, ref BigInteger currentValue, BigInteger percent)
     {
         baseStat += addValue;
         return CalculateTotal(((int)baseStat), percent, ref currentValue);
     }
 
 
-    BigInteger DecreaseBaseStat(ref int baseStat, int subtractValue, ref BigInteger currentValue, int percent)
+    BigInteger DecreaseBaseStat(ref int baseStat, int subtractValue, ref BigInteger currentValue, BigInteger percent)
     {
         baseStat -= subtractValue;
         return CalculateTotal(baseStat, percent, ref currentValue);
     }
 
     // 임시
-    BigInteger DecreaseBaseStat(ref float baseStat, float subtractValue, ref BigInteger currentValue, int percent)
+    BigInteger DecreaseBaseStat(ref float baseStat, float subtractValue, ref BigInteger currentValue, BigInteger percent)
     {
         baseStat -= subtractValue;
         return CalculateTotal(((int)baseStat), percent, ref currentValue);
@@ -166,21 +166,21 @@ public class PlayerStatus : BaseStatus
 
     
 
-    BigInteger IncreaseBaseStatByPercent(ref int percent, int addPercentValue, ref BigInteger currentValue, int baseStat)
+    BigInteger IncreaseBaseStatByPercent(ref BigInteger percent, BigInteger addPercentValue, ref BigInteger currentValue, int baseStat)
     {
         percent += addPercentValue;
         return CalculateTotal(baseStat, percent, ref currentValue);
     }
 
     // 임시
-    BigInteger IncreaseBaseStatByPercent(ref int percent, int addPercentValue, ref BigInteger currentValue, float baseStat)
+    BigInteger IncreaseBaseStatByPercent(ref BigInteger percent, BigInteger addPercentValue, ref BigInteger currentValue, float baseStat)
     {
         percent += addPercentValue;
         return CalculateTotal(((int)baseStat), percent, ref currentValue);
     }
 
 
-    BigInteger DecreaseBaseStatByPercent(ref int percent, int subtractPercentValue, ref BigInteger currentValue, int baseStat)
+    BigInteger DecreaseBaseStatByPercent(ref BigInteger percent, BigInteger subtractPercentValue, ref BigInteger currentValue, int baseStat)
     {
         percent -= subtractPercentValue;
         return CalculateTotal(baseStat, percent, ref currentValue);
@@ -188,7 +188,7 @@ public class PlayerStatus : BaseStatus
 
 
     // 임시
-    BigInteger DecreaseBaseStatByPercent(ref int percent, int subtractPercentValue, ref BigInteger currentValue, float baseStat)
+    BigInteger DecreaseBaseStatByPercent(ref BigInteger percent, BigInteger subtractPercentValue, ref BigInteger currentValue, float baseStat)
     {
         percent -= subtractPercentValue;
         return CalculateTotal(((int)baseStat), percent, ref currentValue);
@@ -197,7 +197,7 @@ public class PlayerStatus : BaseStatus
 
 
     // 한번 봐야할 곳.
-    BigInteger CalculateTotal(int baseStat, int percent, ref BigInteger currentValue)
+    BigInteger CalculateTotal(int baseStat, BigInteger percent, ref BigInteger currentValue)
     {
         // 백분율 증가 계산
         Debug.Log($"어디 한번 보자 :{baseStat} {percent} {BigInteger.Multiply(baseStat, percent)}");

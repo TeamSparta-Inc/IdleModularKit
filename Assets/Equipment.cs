@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Keiwando.BigInteger;
 
 // 장비 타입
 public enum EquipmentType
@@ -36,9 +37,9 @@ public class Equipment : MonoBehaviour
     public Rarity rarity;        // 장비의 희귀도
     public int enhancementLevel; // 강화 상태 (예: 0, 1, 2, ...)
     public int basicEquippedEffect;
-    public int equippedEffect;  // 장착효과
+    public BigInteger equippedEffect;  // 장착효과
     public int basicOwnedEffect;
-    public int ownedEffect;     // 보유효과
+    public BigInteger ownedEffect;     // 보유효과
 
 
     public Equipment(string name, int quantity, int level, bool OnEquipped, EquipmentType type, Rarity rarity,
