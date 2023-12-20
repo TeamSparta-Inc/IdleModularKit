@@ -18,6 +18,7 @@ public class EquipmentManager : MonoBehaviour
     WeaponInfo[] weaponss;
 
     Rarity[] rarities = { Rarity.Common, Rarity.Uncommon, Rarity.Rare, Rarity.Epic, Rarity.Ancient, Rarity.Legendary, Rarity.Mythology };
+    //string[] rarityOrder = { "Common", "Uncommon", "Rare", "Epic", "Ancient", "Legendary", "Mythology" };
 
     //string[] colorsHex = { "#333333", "#3CB371", "#4169E1", "#7058A3", "#FFA500", "#C9BC46", "#DF6464" };
     [SerializeField] Color[] colors;
@@ -26,6 +27,10 @@ public class EquipmentManager : MonoBehaviour
 
     int maxLevel = 4;
 
+    private void Awake()
+    {
+        instance = this;
+    }
 
     private void Start()
     {
@@ -69,6 +74,23 @@ public class EquipmentManager : MonoBehaviour
     }
 
 
+    public int Composite(Equipment equipment)
+    {
+        if (equipment.quantity < 4) return -1;
+
+        int compositeCount = equipment.quantity / 4;
+        equipment.quantity %= 4;
+
+        Equipment nextEquipment = GetNextEquipment(equipment.name);
+
+        nextEquipment.quantity += compositeCount;
+
+        equipment.SetQuantityUI();
+        nextEquipment.SetQuantityUI();
+
+        return compositeCount;
+    }
+
 
     public static void AddEquipment(string equipmentName, Equipment equipment)
     {
@@ -103,4 +125,80 @@ public class EquipmentManager : MonoBehaviour
         allEquipment[equipmentName].quantity = equipment.quantity;
         allEquipment[equipmentName].OnEquipped = equipment.OnEquipped;
     }
+
+
+    public Equipment GetNextEquipment(string currentKey)
+    {
+        int currentRarityIndex = -1;
+        int currentLevel = -1;
+        int maxLevel = 4; // 최대 레벨 설정
+
+        // 현재 키에서 희귀도와 레벨 분리
+        foreach (var rarity in rarities)
+        {
+            if (currentKey.StartsWith(rarity.ToString()))
+            {
+                currentRarityIndex = Array.IndexOf(rarities, rarity);
+                int.TryParse(currentKey.Replace(rarity + "_", ""), out currentLevel);
+                break;
+            }
+        }
+
+        if (currentRarityIndex != -1 && currentLevel != -1)
+        {
+            if (currentLevel < maxLevel)
+            {
+                // 같은 희귀도 내에서 다음 레벨 찾기
+                string nextKey = rarities[currentRarityIndex] + "_" + (currentLevel + 1);
+                return allEquipment.TryGetValue(nextKey, out Equipment nextEquipment) ? nextEquipment : null;
+            }
+            else if (currentRarityIndex < rarities.Length - 1)
+            {
+                // 희귀도를 증가시키고 첫 번째 레벨의 장비 찾기
+                string nextKey = rarities[currentRarityIndex + 1] + "_1";
+                return allEquipment.TryGetValue(nextKey, out Equipment nextEquipment) ? nextEquipment : null;
+            }
+        }
+
+        // 다음 장비를 찾을 수 없는 경우
+        return null;
+    }
+
+
+    public Equipment GetPreviousEquipment(string currentKey)
+    {
+        int currentRarityIndex = -1;
+        int currentLevel = -1;
+
+        // 현재 키에서 희귀도와 레벨 분리
+        foreach (var rarity in rarities)
+        {
+            if (currentKey.StartsWith(rarity.ToString()))
+            {
+                currentRarityIndex = Array.IndexOf(rarities, rarity);
+                int.TryParse(currentKey.Replace(rarity + "_", ""), out currentLevel);
+                break;
+            }
+        }
+
+        if (currentRarityIndex != -1 && currentLevel != -1)
+        {
+            if (currentLevel > 1)
+            {
+                // 같은 희귀도 내에서 이전 레벨 찾기
+                string previousKey = rarities[currentRarityIndex] + "_" + (currentLevel - 1);
+                return allEquipment.TryGetValue(previousKey, out Equipment prevEquipment) ? prevEquipment : null;
+            }
+            else if (currentRarityIndex > 0)
+            {
+                // 희귀도를 낮추고 최대 레벨의 장비 찾기
+                string previousKey = rarities[currentRarityIndex - 1] + "_4";
+                return allEquipment.TryGetValue(previousKey, out Equipment prevEquipment) ? prevEquipment : null;
+            }
+        }
+
+        // 이전 장비를 찾을 수 없는 경우
+        return null;
+    }
+
 }

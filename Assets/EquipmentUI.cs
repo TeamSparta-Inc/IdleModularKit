@@ -21,6 +21,7 @@ public class EquipmentUI : MonoBehaviour
     [SerializeField] Button equipBtn;
     [SerializeField] Button unEquipBtn;
     [SerializeField] Button enhanceBtn;
+    [SerializeField] Button compositeBtn;
 
     private void Awake()
     {
@@ -34,6 +35,7 @@ public class EquipmentUI : MonoBehaviour
         equipBtn.onClick.AddListener(OnClickEquip);
         unEquipBtn.onClick.AddListener(OnClickUnEquip);
         enhanceBtn.onClick.AddListener(OnClickEnhance);
+        compositeBtn.onClick.AddListener(OnclickComposite);
     }
 
 
@@ -82,7 +84,13 @@ public class EquipmentUI : MonoBehaviour
     }
 
 
-    
+
+    public void OnclickComposite()
+    {
+        EquipmentManager.instance.Composite(selectEquipment);
+
+        UpdateSelectEquipmentData();
+    }
 
     public void OnClickEnhance()
     {
