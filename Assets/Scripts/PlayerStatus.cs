@@ -28,7 +28,7 @@ public class PlayerStatus : BaseStatus
     BigInteger currentCritDamageValue = 0;
 
 
-
+    // 스텟 증가 메서드
     public void IncreaseBaseStat(StatusType statusType, int addValue)
     {
         switch (statusType)
@@ -59,6 +59,7 @@ public class PlayerStatus : BaseStatus
         return;
     }
 
+    // 스텟 감소 메서드
     public void DecreaseBaseStat(StatusType statusType, int subtractValue)
     {
         Debug.Log("누구냐 넌 : " + statusType);
@@ -90,7 +91,7 @@ public class PlayerStatus : BaseStatus
         return;
     }
 
-
+    // 스텟 퍼센트 증가 메서드
     public void IncreaseBaseStatByPercent(StatusType statusType, BigInteger addPercent)
     {
         switch (statusType)
@@ -110,6 +111,7 @@ public class PlayerStatus : BaseStatus
         }
     }
 
+    // 스텟 퍼센트 감소 메서드
     public void DecreaseBaseStatByPercent(StatusType statusType, BigInteger subtractPercent)
     {
         switch (statusType)
@@ -129,49 +131,45 @@ public class PlayerStatus : BaseStatus
         }
     }
 
-
+    // 스텟 증가 연산 메서드
     BigInteger IncreaseBaseStat(ref int baseStat, int addValue, ref BigInteger currentValue, BigInteger percent)
     {
         baseStat += addValue;
         return CalculateTotal(baseStat, percent, ref currentValue);
     }
-
     BigInteger IncreaseBaseStat(ref float baseStat, float addValue, ref BigInteger currentValue, BigInteger percent)
     {
         baseStat += addValue;
         return CalculateTotal(((int)baseStat), percent, ref currentValue);
     }
 
-
+    // 스텟 감소 연산 메서드
     BigInteger DecreaseBaseStat(ref int baseStat, int subtractValue, ref BigInteger currentValue, BigInteger percent)
     {
         baseStat -= subtractValue;
         return CalculateTotal(baseStat, percent, ref currentValue);
     }
-
     BigInteger DecreaseBaseStat(ref float baseStat, float subtractValue, ref BigInteger currentValue, BigInteger percent)
     {
         baseStat -= subtractValue;
         return CalculateTotal(((int)baseStat), percent, ref currentValue);
     }
 
-    
-
+    // 스텟 퍼센트 증가 연산 메서드
     BigInteger IncreaseBaseStatByPercent(ref BigInteger percent, BigInteger addPercentValue, ref BigInteger currentValue, int baseStat)
     {
         percent += addPercentValue;
         return CalculateTotal(baseStat, percent, ref currentValue);
     }
 
+    // 스텟 퍼센트 감소 연산 메서드
     BigInteger DecreaseBaseStatByPercent(ref BigInteger percent, BigInteger subtractPercentValue, ref BigInteger currentValue, int baseStat)
     {
         percent -= subtractPercentValue;
         return CalculateTotal(baseStat, percent, ref currentValue);
     }
 
-
-
-    // 한번 봐야할 곳.
+    // 총 공격력 합산 메서드
     BigInteger CalculateTotal(int baseStat, BigInteger percent, ref BigInteger currentValue)
     {
         // 백분율 증가 계산

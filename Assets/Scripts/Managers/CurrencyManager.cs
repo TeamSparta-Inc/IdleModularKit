@@ -22,6 +22,7 @@ public class CurrencyManager : MonoBehaviour
         instance = this;
     }
 
+    // 재화 매니저 초기화 메서드
     public void InitCurrencyManager()
     {
         OnCurrencyChanged += UpdateCurrencyUI;

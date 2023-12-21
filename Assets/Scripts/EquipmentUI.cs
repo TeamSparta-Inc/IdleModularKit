@@ -42,9 +42,21 @@ public class EquipmentUI : MonoBehaviour
 
     private void Start()
     {
+        SetupEventListeners();
+        InitializeButtonListeners();
+
+    }
+
+    // 이벤트 설정하는 메서드
+    void SetupEventListeners()
+    {
         OnClickSelectEquipment += SelectEquipment;
         UpdateEquipmentUI += SetOnEquippedBtnUI;
+    }
 
+    // 버튼 클릭 리스너 설정하는 메서드 
+    void InitializeButtonListeners()
+    {
         equipBtn.onClick.AddListener(OnClickEquip);
         unEquipBtn.onClick.AddListener(OnClickUnEquip);
         enhancePnaelBtn.onClick.AddListener(OnClickEnhancePanel);
@@ -52,15 +64,13 @@ public class EquipmentUI : MonoBehaviour
         compositeBtn.onClick.AddListener(OnclickComposite);
     }
 
-
-
+    // 장비 선택 이벤트 트리거 하는 메서드 
     public static void TriggerSelectEquipment(Equipment equipment)
     {
         OnClickSelectEquipment?.Invoke(equipment);
     }
 
-
-
+    // 장비 클릭 했을 때 불리는 메서드
     public void SelectEquipment(Equipment equipment)
     {
         switch (selectEquipment.type)
@@ -75,7 +85,7 @@ public class EquipmentUI : MonoBehaviour
         SetselectEquipmentTextUI(equipment);
     }
 
-
+    // 선택 장비 데이터 UI로 보여주는 메서드
     void SetselectEquipmentTextUI(Equipment equipment)
     {
         selectEquipmentName.text = equipment.name;
@@ -83,6 +93,7 @@ public class EquipmentUI : MonoBehaviour
         selectEquipment_ownedEffect.text = $"{equipment.ownedEffect}%";
     }
 
+    // 장착 버튼 활성화 / 비활성화 메서드
     void SetOnEquippedBtnUI(bool Onequipped)
     {
         if (Onequipped)
@@ -97,7 +108,7 @@ public class EquipmentUI : MonoBehaviour
         }
     }
 
-
+    // 강화 판넬 버튼 눌렸을 때 불리는 메서드
     public void OnClickEnhancePanel()
     {
         switch (selectEquipment.type)
@@ -123,6 +134,7 @@ public class EquipmentUI : MonoBehaviour
 
     }
 
+    // 합성 버튼 눌렸을 때 불리는 메서드
     public void OnclickComposite()
     {
         EquipmentManager.instance.Composite(selectEquipment);
@@ -132,6 +144,7 @@ public class EquipmentUI : MonoBehaviour
         UpdateSelectEquipmentData();
     }
 
+    // 강화 버튼 눌렸을 때 불리는 메서드
     public void OnClickEnhance()
     {
         if (selectEquipment.enhancementLevel >= selectEquipment.enhancementMaxLevel) return;
@@ -147,6 +160,7 @@ public class EquipmentUI : MonoBehaviour
         OnClickEnhancePanel();
     }
 
+    // 장착 버튼 눌렸을 때 불리는 메서드
     public void OnClickEquip()
     {
         Debug.Log("장착 됨 ");
@@ -154,12 +168,14 @@ public class EquipmentUI : MonoBehaviour
         
     }
 
+    // 장착 해제 버튼 눌렀을 때 불리는 메서드
     public void OnClickUnEquip()
     {
         Player.OnUnEquip?.Invoke(selectEquipment.type);
         
     }
 
+    // 선택한 장비 데이터 업데이트 (저장한다고 생각하면 편함)
     public void UpdateSelectEquipmentData()
     {
         EquipmentManager.SetEquipment(selectEquipment.name, selectEquipment);

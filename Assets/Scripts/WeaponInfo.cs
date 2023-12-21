@@ -27,6 +27,7 @@ public class WeaponInfo : Equipment
         this.basicOwnedEffect = basicOwnedEffect;
     }
 
+    // 매개변수로 받은 WeaponInfo 의 정보 복사
     public void SetWeaponInfo(WeaponInfo targetInfo)
     {
         this.name = targetInfo.name;
@@ -64,6 +65,7 @@ public class WeaponInfo : Equipment
         SetUI();
     }
 
+    // 장비를 구성하는 UI 업데이트 하는 메서드
     public override void SetUI()
     {
         SetBackgroundColor();
@@ -71,6 +73,7 @@ public class WeaponInfo : Equipment
         SetQuantityUI();
     }
 
+    // 장비 개수 보여주는 UI 업데이트 하는 메서드
     public override void SetQuantityUI()
     {
         Debug.Log("Quantity : " + quantity);
@@ -78,11 +81,14 @@ public class WeaponInfo : Equipment
         weaponQuantityText.text = $"{quantity}/4";
     }
 
+    // 배경색 바꾸는 메서드 (Sprite로 변경해야함)
     void SetBackgroundColor()
     {
         Debug.Log(background);
         background.color = myColor;
     }
+
+    // 레벨 보여주는 UI 업데이트 하는 메서드
     void SetLevelText()
     {
         weaponLevelText.text = level.ToString();

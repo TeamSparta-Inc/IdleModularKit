@@ -30,6 +30,7 @@ struct UpgradeData
     public TMP_Text upgradePriceText;
     public Button upgradeBtn;
 
+    // 스텟 UI 업데이트 하는 메서드
     public void SetUpgradeUI()
     {
         upgradeLevelText.text = $"{upgradeLevel}";
@@ -41,6 +42,7 @@ struct UpgradeData
         upgradeValueText.text = $"{upgradeValue.ChangeMoney()}";
     }
 
+    // 스텟 업데이트 하는 메서드
     public void StatusUpdate()
     {
         upgradeLevel++;
@@ -51,6 +53,7 @@ struct UpgradeData
         OnStatusUpgrade?.Invoke(statusType,increase);
     }
 
+    // 크리티컬 스텟 업데이트하는 메서드 
     public void CritStatusUpdate()
     {
         upgradeLevel++;
@@ -61,6 +64,7 @@ struct UpgradeData
         OnCritStatusUpgrade?.Invoke(statusType,critIncrease);
     }
 
+    // 스텟 로드할 때 부르는 메서드
     public void LoadLevelforStatus()
     {
         for (int i=0; i<upgradeLevel; i++)
@@ -72,6 +76,7 @@ struct UpgradeData
         }
     }
 
+    // 크리티컬 스텟 로드할 때 부르는 메서드
     public void LoadLevelforCritStatus()
     {
         for (int i=0; i<upgradeLevel; i++)
@@ -210,6 +215,7 @@ public class StatusUpgradeManager : MonoBehaviour
         instance = this;
     }
 
+    // 이벤트 설정하는 메서드
     public void InitStatusUpgradeManager()
     {
         InitializeButtonListeners();
@@ -297,9 +303,8 @@ public class StatusUpgradeManager : MonoBehaviour
 
 
 
-    // UI 업데이트
+    // 스텟 UI 업데이트
     void SetUpgradeUI(UpgradeData upgradeData) => upgradeData.SetUpgradeUI();
-
     void SetUpgradeUI(StatusType type)
     {
         switch (type)
@@ -322,6 +327,7 @@ public class StatusUpgradeManager : MonoBehaviour
         }
     }
 
+    // 모든 스텟 UI 업데이트
     void SetUpgradeUI_ALL()
     {
         attackUpgradeData.SetUpgradeUI();

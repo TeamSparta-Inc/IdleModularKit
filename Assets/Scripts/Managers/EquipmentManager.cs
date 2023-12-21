@@ -24,11 +24,13 @@ public class EquipmentManager : MonoBehaviour
         instance = this;
     }
 
+    // 장비 매니저 초기화 메서드
     public void InitEquipmentManager()
     {
         SetAllWeapons();
     }
 
+    // 장비들 업데이트 하는 메서드
     void SetAllWeapons()
     {
         if (ES3.KeyExists("Init_Game"))
@@ -41,7 +43,7 @@ public class EquipmentManager : MonoBehaviour
         }
     }
 
-
+    // 로컬에 저장되어 있는 장비 데이터들 불러오는 메서드
     public void LoadAllWeapon()
     {
         int weaponCount = 0;
@@ -74,6 +76,7 @@ public class EquipmentManager : MonoBehaviour
         }
     }
 
+    // 장비 데이터를 만드는 메서드
     void CreateAllWeapon()
     {
         int weaponCount = 0;
@@ -108,6 +111,7 @@ public class EquipmentManager : MonoBehaviour
         }
     }
 
+    // 매개변수로 받은 장비 합성하는 메서드
     public int Composite(Equipment equipment)
     {
         if (equipment.quantity < 4) return -1;
@@ -126,7 +130,7 @@ public class EquipmentManager : MonoBehaviour
         return compositeCount;
     }
 
-
+    // AllEquipment에 Equipment 더하는 메서드
     public static void AddEquipment(string equipmentName, Equipment equipment)
     {
         if (!allEquipment.ContainsKey(equipmentName))
@@ -139,6 +143,7 @@ public class EquipmentManager : MonoBehaviour
         }
     }
 
+    // AllEquipment에서 매개변수로 받은 string을 key로 사용해 Equipment 찾는 매서드
     public static Equipment GetEquipment(string equipmentName)
     {
         if (allEquipment.TryGetValue(equipmentName, out Equipment equipment))
@@ -152,6 +157,7 @@ public class EquipmentManager : MonoBehaviour
         }
     }
 
+    // AllEquipment에서 매개변수로 받은 key을 사용하는 Equipment 업데이트 하는 메서드
     public static void SetEquipment(string equipmentName, Equipment equipment)
     {
         Equipment targetEquipment = allEquipment[equipmentName];
@@ -167,7 +173,7 @@ public class EquipmentManager : MonoBehaviour
         targetEquipment.SaveEquipment(targetEquipment.name);
     }
 
-
+    // 매개변수로 받은 key값을 사용하는 장비의 다음레벨 장비를 불러오는 메서드
     public Equipment GetNextEquipment(string currentKey)
     {
         int currentRarityIndex = -1;
@@ -205,7 +211,7 @@ public class EquipmentManager : MonoBehaviour
         return null;
     }
 
-
+    // 매개변수로 받은 key값을 사용하는 장비의 이전레벨 장비를 불러오는 메서드
     public Equipment GetPreviousEquipment(string currentKey)
     {
         int currentRarityIndex = -1;

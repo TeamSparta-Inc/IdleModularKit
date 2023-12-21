@@ -5,7 +5,6 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 
-    // Start is called before the first frame update
     void Start()
     {
 
@@ -17,9 +16,4 @@ public class GameManager : MonoBehaviour
         ES3.Save<bool>("Init_Game", true);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

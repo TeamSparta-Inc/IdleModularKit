@@ -1,16 +1,5 @@
 
-
-// 모든 능력치 객체가 따라야 할 기본 인터페이스
-//public interface IStatus 
-//{
-//    int baseAttack { get; set; }
-//    int baseHealth { get; set; }
-//    int baseDefense { get; set; }
-//    float baseCritChance { get; set; }
-//    float baseCritDamage { get; set; }
-//}
-
-// 모든 능력치 객체의 기본적인 행동 정의
+// 모든 능력치 객체의 기본적인 행동 정의 / 몬스터에도 쓰일 예정
 public class BaseStatus
 {
     public int baseAttack; // 공격력

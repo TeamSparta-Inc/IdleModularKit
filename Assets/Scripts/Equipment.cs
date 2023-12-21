@@ -71,6 +71,7 @@ public class Equipment : MonoBehaviour
         // 강화효과 업데이트...
     }
 
+    // 강화할 때 필요한 강화석 return 시키는 메서드
     public BigInteger GetEnhanceStone()
     {
         var requipredEnhanceStone = ownedEffect - basicOwnedEffect;
@@ -78,25 +79,7 @@ public class Equipment : MonoBehaviour
         return requipredEnhanceStone;
     }
 
-    public float CalculateEffect(float baseStat)
-    {
-        float effect = 0f;
-        switch (type)
-        {
-            case EquipmentType.Weapon:
-                // 무기의 경우
-                effect = baseStat + (enhancementLevel * baseStat * 0.05f); // 장착 효과
-                effect += 10; // 보유 효과
-                break;
-            case EquipmentType.Armor:
-                // 방어구의 경우
-                effect = baseStat + (enhancementLevel * baseStat * 0.03f); // 장착 효과
-                effect += 20; // 보유 효과
-                break;
-        }
-        return effect;
-    }
-
+    // 개수 체크하는 메서드
     public bool CheckQuantity()
     {
         if (quantity >= 4)
@@ -108,10 +91,8 @@ public class Equipment : MonoBehaviour
         return false;
     }
 
-    public virtual void SetQuantityUI()
-    {
-    }
-
+    // WeaponInfo 확인.
+    public virtual void SetQuantityUI(){}
     public virtual void SetUI(){}
 
     // 장비 데이터를 ES3 파일에 저장
@@ -191,6 +172,4 @@ public class Equipment : MonoBehaviour
         ownedEffect = new BigInteger(ES3.Load<string>("ownedEffect_" + equipmentID));
 
     }
-
-
 }

@@ -29,14 +29,22 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     WeaponInfo equiped_Weapon = null;
-    //WeaponInfo unEquiped_Weapon = null;
-    //BigInteger unEquiped_WeaponEffect = 0;
 
 
     private void Awake()
     {
         instance = this;
 
+    }
+
+    private void Start()
+    {
+        SetupEventListeners();
+    }
+
+    // 이벤트 설정하는 메서드
+    void SetupEventListeners()
+    {
         StatusUpgradeManager.OnAttackUpgrade += status.IncreaseBaseStat;
         StatusUpgradeManager.OnHealthUpgrade += status.IncreaseBaseStat;
         StatusUpgradeManager.OnDefenseUpgrade += status.IncreaseBaseStat;
@@ -48,7 +56,7 @@ public class Player : MonoBehaviour
         OnUnEquip += UnEquip;
     }
 
-
+    // 현재 능력치를 불러오는 메서드
     public BigInteger GetCurrentStatus(StatusType statusType)
     {
         switch (statusType)
@@ -67,6 +75,7 @@ public class Player : MonoBehaviour
         return null;
     }
 
+    // 현재 능력치를 업데이트 하는 메서드
     public void SetCurrentStatus(StatusType statusType, BigInteger statusValue)
     {
         switch (statusType)
@@ -90,7 +99,7 @@ public class Player : MonoBehaviour
         }
     }
 
-
+    // 장비 장착하는 메서드 
     public void Equip(Equipment equipment)
     {
         //equipment.OnEquipped = true;
@@ -113,6 +122,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    // 장비 해제하는 메서드 
     public void UnEquip(EquipmentType equipmentType)
     {
         // 퍼센트 차감 로직 구현 필요.
