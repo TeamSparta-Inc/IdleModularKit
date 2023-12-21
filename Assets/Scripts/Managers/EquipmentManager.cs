@@ -101,7 +101,7 @@ public class EquipmentManager : MonoBehaviour
                 string ownedEffectText = $"{ownedEffect}%"; 
 
                 weapon.SetWeaponInfo(name, 1, level, false, EquipmentType.Weapon, rarity,
-                                 level, equippedEffect, ownedEffect, colors[rarityIntValue]);
+                                 1, equippedEffect, ownedEffect, colors[rarityIntValue]);
 
                 weapon.GetComponent<Button>().onClick.AddListener(() => EquipmentUI.TriggerSelectEquipment(weapon));
 
@@ -166,6 +166,7 @@ public class EquipmentManager : MonoBehaviour
         targetEquipment.ownedEffect = equipment.ownedEffect;
         targetEquipment.quantity = equipment.quantity;
         targetEquipment.OnEquipped = equipment.OnEquipped;
+        targetEquipment.enhancementLevel = equipment.enhancementLevel;  
 
         targetEquipment.SetQuantityUI();
 

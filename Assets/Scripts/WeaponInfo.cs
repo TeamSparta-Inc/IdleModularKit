@@ -42,6 +42,8 @@ public class WeaponInfo : Equipment
 
         equippedEffect = this.basicEquippedEffect;
         ownedEffect = this.basicOwnedEffect;
+
+        enhancementMaxLevel = 100;
     }
     public void SetWeaponInfo(string name, int quantity,int level, bool OnEquipped, EquipmentType type, Rarity rarity, int enhancementLevel, int basicEquippedEffect, int basicOwnedEffect, Color myColor)
     {
@@ -62,7 +64,7 @@ public class WeaponInfo : Equipment
         SetUI();
     }
 
-    public void SetUI()
+    public override void SetUI()
     {
         SetBackgroundColor();
         SetLevelText();

@@ -382,18 +382,19 @@ MonoBehaviour:
   name: 
   quantity: 0
   level: 0
+  OnEquipped: 0
   type: 0
   rarity: 0
   enhancementLevel: 0
-  equippedEffect: 
-  ownedEffect: 
-  enhancementEffect: 
+  basicEquippedEffect: 0
+  basicOwnedEffect: 0
+  enhancementMaxLevel: 100
   background: {fileID: 7567183643475594283}
   weaponImage: {fileID: 0}
   weaponLevelText: {fileID: 2515669760605286894}
   weaponQuantityBar: {fileID: 5970271482148649702}
   weaponQuantityText: {fileID: 1925325015458995563}
-  weaponCount: 0
+  myColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &4030417011910795408
 MonoBehaviour:
   m_ObjectHideFlags: 0

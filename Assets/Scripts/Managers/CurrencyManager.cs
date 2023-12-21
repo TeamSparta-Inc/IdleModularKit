@@ -85,7 +85,6 @@ public class CurrencyManager : MonoBehaviour
         return true;
     }
 
-
     void UpdateCurrencyUI(string currencyName, string amount)
     {
         Currency currency = currencies.Find(c => c.currencyName == currencyName);

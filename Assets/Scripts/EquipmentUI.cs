@@ -21,8 +21,19 @@ public class EquipmentUI : MonoBehaviour
 
     [SerializeField] Button equipBtn;
     [SerializeField] Button unEquipBtn;
-    [SerializeField] Button enhanceBtn;
+    [SerializeField] Button enhancePnaelBtn;
     [SerializeField] Button compositeBtn;
+
+
+    [Header("강화 패널")]
+    [SerializeField] Equipment enhanceEquipment; // 강화 무기
+    [SerializeField] Button enhanceBtn; // 강화 버튼
+    [SerializeField] TMP_Text enhanceLevelText; // 강화 레벨 / 장비 강화 (0/0)
+    [SerializeField] TMP_Text EquippedPreview; // 장착 효과 미리보기 / 장착 효과 0 → 0
+    [SerializeField] TMP_Text OwnedPreview;// 보유 효과 미리보기 / 보유 효과 0 → 0
+    [SerializeField] TMP_Text EnhanceCurrencyText; // 현재 재화
+    [SerializeField] TMP_Text RequiredCurrencyText; // 필요 재화
+
 
     private void Awake()
     {
@@ -36,6 +47,7 @@ public class EquipmentUI : MonoBehaviour
 
         equipBtn.onClick.AddListener(OnClickEquip);
         unEquipBtn.onClick.AddListener(OnClickUnEquip);
+        enhancePnaelBtn.onClick.AddListener(OnClickEnhancePanel);
         enhanceBtn.onClick.AddListener(OnClickEnhance);
         compositeBtn.onClick.AddListener(OnclickComposite);
     }
@@ -86,6 +98,29 @@ public class EquipmentUI : MonoBehaviour
     }
 
 
+    public void OnClickEnhancePanel()
+    {
+        switch (selectEquipment.type)
+        {
+            case EquipmentType.Weapon:
+                Equipment enhanceEquipmentTemp = EquipmentManager.GetEquipment(selectEquipment.name);
+
+                Debug.Log("가보자" + enhanceEquipmentTemp.GetComponent<WeaponInfo>().myColor);
+
+                enhanceLevelText.text = $"장비 강화 ({enhanceEquipmentTemp.enhancementLevel} / {enhanceEquipmentTemp.enhancementMaxLevel}</color>)"; //장비 강화(0 / 0)
+                EquippedPreview.text = $"장착 효과 {enhanceEquipmentTemp.equippedEffect} → <color=green>{enhanceEquipmentTemp.equippedEffect + enhanceEquipmentTemp.basicEquippedEffect}</color>"; // 장착 효과 0 → 0
+                OwnedPreview.text = $"보유 효과 {enhanceEquipmentTemp.ownedEffect} → <color=green>{enhanceEquipmentTemp.ownedEffect + enhanceEquipmentTemp.basicOwnedEffect}</color>";
+
+                EnhanceCurrencyText.text = CurrencyManager.instance.GetCurrencyAmount("EnhanceStone");
+                RequiredCurrencyText.text = enhanceEquipmentTemp.ownedEffect.ToString();
+
+                enhanceEquipment.GetComponent<WeaponInfo>().SetWeaponInfo(enhanceEquipmentTemp.GetComponent<WeaponInfo>());
+
+                enhanceEquipment.SetUI();
+                break;
+        }
+
+    }
 
     public void OnclickComposite()
     {
@@ -98,6 +133,7 @@ public class EquipmentUI : MonoBehaviour
 
     public void OnClickEnhance()
     {
+        if (selectEquipment.enhancementLevel >= selectEquipment.enhancementMaxLevel) return;
         selectEquipment.Enhance();
         SetselectEquipmentTextUI(selectEquipment);
 
@@ -105,19 +141,21 @@ public class EquipmentUI : MonoBehaviour
         if (selectEquipment.OnEquipped) OnClickEquip();
 
         UpdateSelectEquipmentData();
+
+        OnClickEnhancePanel();
     }
 
     public void OnClickEquip()
     {
         Debug.Log("장착 됨 ");
         Player.OnEquip?.Invoke(EquipmentManager.GetEquipment(selectEquipment.name));
-        //UpdateSelectEquipmentData();
+        
     }
 
     public void OnClickUnEquip()
     {
         Player.OnUnEquip?.Invoke(selectEquipment.type);
-        //UpdateSelectEquipmentData();
+        
     }
 
     public void UpdateSelectEquipmentData()

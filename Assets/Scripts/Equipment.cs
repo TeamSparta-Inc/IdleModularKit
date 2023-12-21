@@ -41,7 +41,7 @@ public class Equipment : MonoBehaviour
     public BigInteger equippedEffect;  // 장착효과
     public int basicOwnedEffect;
     public BigInteger ownedEffect;     // 보유효과
-
+   [HideInInspector] public int enhancementMaxLevel = 100;
 
     public Equipment(string name, int quantity, int level, bool OnEquipped, EquipmentType type, Rarity rarity,
                  int enhancementLevel, int basicEquippedEffect, int basicOwnedEffect)
@@ -107,7 +107,7 @@ public class Equipment : MonoBehaviour
     {
     }
 
-
+    public virtual void SetUI(){}
 
     // 장비 데이터를 ES3 파일에 저장
     public void SaveEquipment()
