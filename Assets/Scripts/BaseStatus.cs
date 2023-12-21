@@ -19,5 +19,5 @@ public class BaseStatus
 
     // 치명타 확률과 치명타 데미지는 일반적으로 큰 수치가 아니므로, float 사용
     public float baseCritChance;// 크리티컬 확률
-    public float baseCritDamage;// 크리티컬 데미지
+    public int baseCritDamage;// 크리티컬 데미지
 }

@@ -29,50 +29,52 @@ public class PlayerStatus : BaseStatus
 
 
 
-    public void IncreaseBaseStat(StatusType statsType, int addValue)
+    public void IncreaseBaseStat(StatusType statusType, int addValue)
     {
-        Debug.Log("누구냐 넌 : " + statsType);
-        switch (statsType)
+        switch (statusType)
         {
             case StatusType.ATK:
-                Player.instance.SetCurrentStatus(statsType, IncreaseBaseStat(ref baseAttack, addValue, ref currentAttackValue, attackPercent));
+                Player.instance.SetCurrentStatus(statusType, IncreaseBaseStat(ref baseAttack, addValue, ref currentAttackValue, attackPercent));
                 break;
             case StatusType.HP:
-                Player.instance.SetCurrentStatus(statsType, IncreaseBaseStat(ref baseHealth, addValue, ref currentHealthValue, healthPercent));
+                Player.instance.SetCurrentStatus(statusType, IncreaseBaseStat(ref baseHealth, addValue, ref currentHealthValue, healthPercent));
                 break;
             case StatusType.DEF:
-                Player.instance.SetCurrentStatus(statsType, IncreaseBaseStat(ref baseDefense, addValue, ref currentDefenseValue, defensePercent));
+                Player.instance.SetCurrentStatus(statusType, IncreaseBaseStat(ref baseDefense, addValue, ref currentDefenseValue, defensePercent));
+                break;
+            case StatusType.CRIT_DMG:
+                Player.instance.SetCurrentStatus(statusType, IncreaseBaseStat(ref baseCritDamage, addValue, ref currentCritDamageValue, critDamagePercent));
                 break;
         }
         return;
     }
-    public void IncreaseBaseStat(StatusType statsType, float addValue)
+    public void IncreaseBaseStat(StatusType statusType, float addValue)
     {
-        switch (statsType)
+        switch (statusType)
         {
             case StatusType.CRIT_CH:
-                Player.instance.SetCurrentStatus(statsType, IncreaseBaseStat(ref baseCritChance, addValue, ref currentCritChanceValue, critChancePercent));
-                break;
-            case StatusType.CRIT_DMG:
-                Player.instance.SetCurrentStatus(statsType, IncreaseBaseStat(ref baseCritDamage, addValue, ref currentCritDamageValue, critDamagePercent));
+                Player.instance.SetCurrentStatus(statusType, IncreaseBaseStat(ref baseCritChance, addValue, ref currentCritChanceValue, critChancePercent));
                 break;
         }
         return;
     }
 
-    public void DecreaseBaseStat(StatusType statsType, int subtractValue)
+    public void DecreaseBaseStat(StatusType statusType, int subtractValue)
     {
-        Debug.Log("누구냐 넌 : " + statsType);
-        switch (statsType)
+        Debug.Log("누구냐 넌 : " + statusType);
+        switch (statusType)
         {
             case StatusType.ATK:
-                Player.instance.SetCurrentStatus(statsType, DecreaseBaseStat(ref baseAttack, subtractValue, ref currentAttackValue, attackPercent));
+                Player.instance.SetCurrentStatus(statusType, DecreaseBaseStat(ref baseAttack, subtractValue, ref currentAttackValue, attackPercent));
                 break;
             case StatusType.HP:
-                Player.instance.SetCurrentStatus(statsType, DecreaseBaseStat(ref baseHealth, subtractValue, ref currentHealthValue, healthPercent));
+                Player.instance.SetCurrentStatus(statusType, DecreaseBaseStat(ref baseHealth, subtractValue, ref currentHealthValue, healthPercent));
                 break;
             case StatusType.DEF:
-                Player.instance.SetCurrentStatus(statsType, DecreaseBaseStat(ref baseDefense, subtractValue, ref currentDefenseValue, defensePercent));
+                Player.instance.SetCurrentStatus(statusType, DecreaseBaseStat(ref baseDefense, subtractValue, ref currentDefenseValue, defensePercent));
+                break;
+            case StatusType.CRIT_DMG:
+                Player.instance.SetCurrentStatus(statusType, DecreaseBaseStat(ref baseCritDamage, subtractValue, ref currentCritDamageValue, critDamagePercent));
                 break;
         }
         return;
@@ -83,9 +85,6 @@ public class PlayerStatus : BaseStatus
         {
             case StatusType.CRIT_CH:
                 Player.instance.SetCurrentStatus(statsType, DecreaseBaseStat(ref baseCritChance, subtractValue, ref currentCritChanceValue, critChancePercent));
-                break;
-            case StatusType.CRIT_DMG:
-                Player.instance.SetCurrentStatus(statsType, DecreaseBaseStat(ref baseCritDamage, subtractValue, ref currentCritDamageValue, critDamagePercent));
                 break;
         }
         return;
@@ -104,9 +103,6 @@ public class PlayerStatus : BaseStatus
                 break;
             case StatusType.DEF:
                 Player.instance.SetCurrentStatus(statusType, IncreaseBaseStatByPercent(ref defensePercent, addPercent, ref currentDefenseValue, baseDefense));
-                break;
-            case StatusType.CRIT_CH:
-                Player.instance.SetCurrentStatus(statusType, IncreaseBaseStatByPercent(ref critChancePercent, addPercent, ref currentCritChanceValue, baseCritChance));
                 break;
             case StatusType.CRIT_DMG:
                 Player.instance.SetCurrentStatus(statusType, IncreaseBaseStatByPercent(ref critDamagePercent, addPercent, ref currentCritDamageValue, baseCritDamage));
@@ -127,9 +123,6 @@ public class PlayerStatus : BaseStatus
             case StatusType.DEF:
                 Player.instance.SetCurrentStatus(statusType, DecreaseBaseStatByPercent(ref defensePercent, subtractPercent, ref currentDefenseValue, baseDefense));
                 break;
-            case StatusType.CRIT_CH:
-                Player.instance.SetCurrentStatus(statusType, DecreaseBaseStatByPercent(ref critChancePercent, subtractPercent, ref currentCritChanceValue, baseCritChance));
-                break;
             case StatusType.CRIT_DMG:
                 Player.instance.SetCurrentStatus(statusType, DecreaseBaseStatByPercent(ref critDamagePercent, subtractPercent, ref currentCritDamageValue, baseCritDamage));
                 break;
@@ -143,7 +136,6 @@ public class PlayerStatus : BaseStatus
         return CalculateTotal(baseStat, percent, ref currentValue);
     }
 
-    // 임시
     BigInteger IncreaseBaseStat(ref float baseStat, float addValue, ref BigInteger currentValue, BigInteger percent)
     {
         baseStat += addValue;
@@ -157,7 +149,6 @@ public class PlayerStatus : BaseStatus
         return CalculateTotal(baseStat, percent, ref currentValue);
     }
 
-    // 임시
     BigInteger DecreaseBaseStat(ref float baseStat, float subtractValue, ref BigInteger currentValue, BigInteger percent)
     {
         baseStat -= subtractValue;
@@ -172,26 +163,10 @@ public class PlayerStatus : BaseStatus
         return CalculateTotal(baseStat, percent, ref currentValue);
     }
 
-    // 임시
-    BigInteger IncreaseBaseStatByPercent(ref BigInteger percent, BigInteger addPercentValue, ref BigInteger currentValue, float baseStat)
-    {
-        percent += addPercentValue;
-        return CalculateTotal(((int)baseStat), percent, ref currentValue);
-    }
-
-
     BigInteger DecreaseBaseStatByPercent(ref BigInteger percent, BigInteger subtractPercentValue, ref BigInteger currentValue, int baseStat)
     {
         percent -= subtractPercentValue;
         return CalculateTotal(baseStat, percent, ref currentValue);
-    }
-
-
-    // 임시
-    BigInteger DecreaseBaseStatByPercent(ref BigInteger percent, BigInteger subtractPercentValue, ref BigInteger currentValue, float baseStat)
-    {
-        percent -= subtractPercentValue;
-        return CalculateTotal(((int)baseStat), percent, ref currentValue);
     }
 
 

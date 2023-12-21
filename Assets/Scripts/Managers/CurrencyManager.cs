@@ -66,11 +66,13 @@ public class CurrencyManager : MonoBehaviour
         return currency?.amount ?? "0";
     }
 
+    // 모든 통화를 로컬에 저장시킵니다.
     public void SaveCurrencies()
     {
         ES3.Save<List<Currency>>("currencies", currencies);
     }
 
+    // 로컬에 저장되어있는 모든 통화를 불러옵니다.
     public bool LoadCurrencies()
     {
         if (ES3.KeyExists("currencies"))
@@ -85,6 +87,7 @@ public class CurrencyManager : MonoBehaviour
         return true;
     }
 
+    // 통화의 UI를 업데이트 시킵니다.
     void UpdateCurrencyUI(string currencyName, string amount)
     {
         Currency currency = currencies.Find(c => c.currencyName == currencyName);

@@ -8,19 +8,13 @@ public class EquipmentManager : MonoBehaviour
 {
     public static EquipmentManager instance;
 
-    //[SerializeField] List<Equipment> allEquipment = new List<Equipment>();
-
     [SerializeField] List<WeaponInfo> weapons = new List<WeaponInfo>();
 
     [SerializeField]
     public static Dictionary<string, Equipment> allEquipment = new Dictionary<string, Equipment>();
 
-    //WeaponInfo[] weaponss;
-
     Rarity[] rarities = { Rarity.Common, Rarity.Uncommon, Rarity.Rare, Rarity.Epic, Rarity.Ancient, Rarity.Legendary, Rarity.Mythology };
-    //string[] rarityOrder = { "Common", "Uncommon", "Rare", "Epic", "Ancient", "Legendary", "Mythology" };
 
-    //string[] colorsHex = { "#333333", "#3CB371", "#4169E1", "#7058A3", "#FFA500", "#C9BC46", "#DF6464" };
     [SerializeField] Color[] colors;
 
     int maxLevel = 4;
