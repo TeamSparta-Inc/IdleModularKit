@@ -42,7 +42,7 @@ UI - 해당 기능의 UI변화 감지 및 Scene의 상호작용을 담당하는 
 
 ## 설치 및 설정 지침
 
-처음 클론할 때는 Build Settings의 Platform을 Android로 변경. 
-Scene을 찾지 못할 경우 Project 검색창에 "t:scene"을 검색.
-ES3의 저장된 로컬 데이터를 보고 싶다면 상단 메뉴바에서 Tools -> Eesy Save 3 -> Open Persistent Data Path 클릭을 하면 폴더가 열리는데 IdleModularKit 폴더에 들어가 SaveFile.es3 실행
-ES3의 로컬 데이터를 날리고 싶다면 상단 메뉴바에서 Tools -> Eesy Save 3 -> Clear Persistent Data Path 클릭
+- 처음 클론할 때는 Build Settings의 Platform을 Android로 변경. 
+- Scene을 찾지 못할 경우 Project 검색창에 "t:scene"을 검색.
+- ES3의 저장된 로컬 데이터를 보고 싶다면 상단 메뉴바에서 Tools -> Eesy Save 3 -> Open Persistent Data Path 클릭을 하면 폴더가 열리는데 IdleModularKit 폴더에 들어가 SaveFile.es3 실행
+- ES3의 로컬 데이터를 날리고 싶다면 상단 메뉴바에서 Tools -> Eesy Save 3 -> Clear Persistent Data Path 클릭
