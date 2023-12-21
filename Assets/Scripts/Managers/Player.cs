@@ -122,7 +122,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    // 장비 해제하는 메서드 
+    // 장비 장착 해제하는 메서드 
     public void UnEquip(EquipmentType equipmentType)
     {
         // 퍼센트 차감 로직 구현 필요.

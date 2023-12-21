@@ -74,7 +74,8 @@ public class Equipment : MonoBehaviour
     // 강화할 때 필요한 강화석 return 시키는 메서드
     public BigInteger GetEnhanceStone()
     {
-        var requipredEnhanceStone = ownedEffect - basicOwnedEffect;
+        Debug.Log($"{ownedEffect}  {basicOwnedEffect}");
+        var requipredEnhanceStone = equippedEffect - basicOwnedEffect;
 
         return requipredEnhanceStone;
     }

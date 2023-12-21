@@ -11,7 +11,7 @@ public class EquipmentManager : MonoBehaviour
     [SerializeField] List<WeaponInfo> weapons = new List<WeaponInfo>();
 
     [SerializeField]
-    public static Dictionary<string, Equipment> allEquipment = new Dictionary<string, Equipment>();
+    private static Dictionary<string, Equipment> allEquipment = new Dictionary<string, Equipment>();
 
     Rarity[] rarities = { Rarity.Common, Rarity.Uncommon, Rarity.Rare, Rarity.Epic, Rarity.Ancient, Rarity.Legendary, Rarity.Mythology };
 

@@ -29,7 +29,7 @@ public class CurrencyManager : MonoBehaviour
         LoadCurrencies();
     }
 
-    // 측정 통화를 증가시키는 메서드
+    // 특정 통화를 증가시키는 메서드
     public void AddCurrency(string currencyName, BigInteger value)
     {
         Currency currency = currencies.Find(c => c.currencyName == currencyName);
@@ -67,13 +67,13 @@ public class CurrencyManager : MonoBehaviour
         return currency?.amount ?? "0";
     }
 
-    // 모든 통화를 로컬에 저장시킵니다.
+    // 모든 통화를 로컬에 저장시키는 메서드
     public void SaveCurrencies()
     {
         ES3.Save<List<Currency>>("currencies", currencies);
     }
 
-    // 로컬에 저장되어있는 모든 통화를 불러옵니다.
+    // 로컬에 저장되어있는 모든 통화를 불러오는 메서드
     public bool LoadCurrencies()
     {
         if (ES3.KeyExists("currencies"))
@@ -88,7 +88,7 @@ public class CurrencyManager : MonoBehaviour
         return true;
     }
 
-    // 통화의 UI를 업데이트 시킵니다.
+    // 통화의 UI를 업데이트 시키는 메서드
     void UpdateCurrencyUI(string currencyName, string amount)
     {
         Currency currency = currencies.Find(c => c.currencyName == currencyName);

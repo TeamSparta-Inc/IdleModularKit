@@ -42,16 +42,22 @@ public class EquipmentUI : MonoBehaviour
 
     private void Start()
     {
-        SetupEventListeners();
+        //SetupEventListeners();
         InitializeButtonListeners();
 
     }
 
     // 이벤트 설정하는 메서드
-    void SetupEventListeners()
+    private void OnEnable()
     {
         OnClickSelectEquipment += SelectEquipment;
         UpdateEquipmentUI += SetOnEquippedBtnUI;
+    }
+
+    private void OnDisable()
+    {
+        OnClickSelectEquipment -= SelectEquipment;
+        UpdateEquipmentUI -= SetOnEquippedBtnUI;
     }
 
     // 버튼 클릭 리스너 설정하는 메서드 
@@ -76,14 +82,24 @@ public class EquipmentUI : MonoBehaviour
         switch (selectEquipment.type)
         {
             case EquipmentType.Weapon:
-                equipment.SetQuantityUI();
                 selectEquipment.GetComponent<WeaponInfo>().SetWeaponInfo(equipment.GetComponent<WeaponInfo>());
-                selectEquipment.GetComponent<WeaponInfo>().SetUI();
-                SetOnEquippedBtnUI(selectEquipment.OnEquipped);
+                UpdateSelectedEquipmentUI(selectEquipment);
                 break;
         }
-        SetselectEquipmentTextUI(equipment);
     }
+
+    
+    private void UpdateSelectedEquipmentUI(Equipment equipment)
+    {
+        equipment.SetQuantityUI();
+
+        selectEquipment.GetComponent<WeaponInfo>().SetUI();
+        SetOnEquippedBtnUI(selectEquipment.OnEquipped);
+
+        SetselectEquipmentTextUI(equipment);
+
+    }
+
 
     // 선택 장비 데이터 UI로 보여주는 메서드
     void SetselectEquipmentTextUI(Equipment equipment)
@@ -124,6 +140,7 @@ public class EquipmentUI : MonoBehaviour
 
                 EnhanceCurrencyText.text = CurrencyManager.instance.GetCurrencyAmount("EnhanceStone");
 
+                Debug.Log("얼마냐 : " + enhanceEquipmentTemp.GetEnhanceStone());
                 RequiredCurrencyText.text = enhanceEquipmentTemp.GetEnhanceStone().ToString();
 
                 enhanceEquipment.GetComponent<WeaponInfo>().SetWeaponInfo(enhanceEquipmentTemp.GetComponent<WeaponInfo>());
@@ -148,6 +165,7 @@ public class EquipmentUI : MonoBehaviour
     public void OnClickEnhance()
     {
         if (selectEquipment.enhancementLevel >= selectEquipment.enhancementMaxLevel) return;
+        if (selectEquipment.GetEnhanceStone() > new BigInteger(CurrencyManager.instance.GetCurrencyAmount("EnhanceStone"))) return;
         CurrencyManager.instance.SubtractCurrency("EnhanceStone",selectEquipment.GetEnhanceStone());
         selectEquipment.Enhance();
         SetselectEquipmentTextUI(selectEquipment);
