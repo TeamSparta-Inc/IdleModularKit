@@ -71,7 +71,12 @@ public class Equipment : MonoBehaviour
         // 강화효과 업데이트...
     }
 
+    public BigInteger GetEnhanceStone()
+    {
+        var requipredEnhanceStone = ownedEffect - basicOwnedEffect;
 
+        return requipredEnhanceStone;
+    }
 
     public float CalculateEffect(float baseStat)
     {

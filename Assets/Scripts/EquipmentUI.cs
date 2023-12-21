@@ -112,7 +112,8 @@ public class EquipmentUI : MonoBehaviour
                 OwnedPreview.text = $"보유 효과 {enhanceEquipmentTemp.ownedEffect} → <color=green>{enhanceEquipmentTemp.ownedEffect + enhanceEquipmentTemp.basicOwnedEffect}</color>";
 
                 EnhanceCurrencyText.text = CurrencyManager.instance.GetCurrencyAmount("EnhanceStone");
-                RequiredCurrencyText.text = enhanceEquipmentTemp.ownedEffect.ToString();
+
+                RequiredCurrencyText.text = enhanceEquipmentTemp.GetEnhanceStone().ToString();
 
                 enhanceEquipment.GetComponent<WeaponInfo>().SetWeaponInfo(enhanceEquipmentTemp.GetComponent<WeaponInfo>());
 
@@ -134,6 +135,7 @@ public class EquipmentUI : MonoBehaviour
     public void OnClickEnhance()
     {
         if (selectEquipment.enhancementLevel >= selectEquipment.enhancementMaxLevel) return;
+        CurrencyManager.instance.SubtractCurrency("EnhanceStone",selectEquipment.GetEnhanceStone());
         selectEquipment.Enhance();
         SetselectEquipmentTextUI(selectEquipment);
 
