@@ -30,4 +30,3 @@ UI - 해당 기능의 UI변화 감지 및 Scene의 상호작용을 담당하는 
 ## 사용 패키지
 - **ES3**: 로컬로 저장하는 기능을 지원한다. 기존 PlayerPrefabs는 int, string bool 자료형 밖에 저장이 안되었지만, struct나 List, Dictionary등을 저장할 수 있게 해준다.
 - **BigInteger**: int, long 보다 더 큰 수를 저장할 수 있게 해준다. 물론 C#에서 BigInteger를 지원해주지만, Unity에서는 C#에서 지원해주는 BigInteger를 사용할 수 없다.
-- 
